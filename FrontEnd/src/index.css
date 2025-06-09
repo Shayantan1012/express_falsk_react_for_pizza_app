@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.montserrat-font1 {
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .arima-font2 {
+    font-family: "Arima", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+  }
+  
+  .afacad-flux-font3 {
+    font-family: "Afacad Flux", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size:larger;
+    font-variation-settings:
+      "slnt" 0;
+  }
+
+  .arima-font4 {
+    font-family: "Arima", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+
+
+  .afacad-flux-font5 {
+    font-family: "Afacad Flux", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings:
+      "slnt" 2;
+  }
