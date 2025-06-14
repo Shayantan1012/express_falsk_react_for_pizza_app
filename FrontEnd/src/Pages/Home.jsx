@@ -84,6 +84,7 @@ return(
             </div>
     
     </div>
+
     <OverlappingFoodImages/>
 
 </section>
@@ -91,8 +92,8 @@ return(
 <section className='flex flex-col md:flex-col  justify-center md:justify-between mb-2 py-5 md:flex-row bg-gradient-to-r from-white via-gray-100 to-white space-x-* mt-2'>
 <div className='afacad-flux-font3 font-extrabold  flex flex-col md:flex-row  justify-center md:justify-start'>
 
+   
     <Slider images={images}/>
-
 
 
     <div className='flex flex-col items-center justify-center md:justify-start'>

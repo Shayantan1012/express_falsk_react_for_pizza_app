@@ -24,20 +24,20 @@ function Slider({images}){
 
     return (
         <div className={Styles.slider}>
-            {
-                images.map((image,idx)=>{
-                    return (
-                        <div key={idx} className={slider===idx ?Styles.sliderImage_block:Styles.sliderImage_none}>
-                            <img src={image} alt="image"/>
-                            <div className={Styles.navigation}>
-                            <GoArrowLeft className={Styles.arrow} onClick={change_minus}/>
-                            <GoArrowRight className={Styles.arrow}  onClick={change_plus}/>
-                            </div>
+           {
+            images.map((image, idx) => {
+                return slider === idx && (
+                    <div key={idx} className={Styles.sliderImage_block}>
+                        <img src={image} alt="image" />
+                        <div className={Styles.navigation}>
+                            <GoArrowLeft className={Styles.arrow} onClick={change_minus} />
+                            <GoArrowRight className={Styles.arrow} onClick={change_plus} />
                         </div>
-                )
-            }
-        )
-    }
+                    </div>
+                );
+            })
+}
+    
         </div>
     )
 }

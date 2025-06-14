@@ -17,13 +17,13 @@ return (
                     {productsData.map((item) => {
                         return (
                             item.inStock && (
-                                <div className="p-4 md:w-1/3" key={item._id}>
+                                <div className="p-4 w-[90%] h-[20%] md:w-1/3" key={item._id}>
                                     <Link to={`/product/${item._id}`}>
-                                        <div className="overflow-hidden border shadow-xl hover:shadow-2xl rounded-lg border-opacity-60">
+                                    <div className="overflow-hidden border shadow-xl hover:shadow-2xl rounded-lg border-opacity-60 transform transition-transform duration-500 ease-in-out hover:scale-105">
                                             <img 
                                                 src={item.productImage}
                                                 alt="Pizza Image"
-                                                className="object-cover object-center w-full lg:h-48 md:h-36"
+                                                className="object-cover object-center w-full h-30 lg:h-48 md:h-36"
                                             />
                                             <div className="p-6 border">
                                                 <h2 className="text-xs  font-medium tracking-widest text-gray-400 title-font">

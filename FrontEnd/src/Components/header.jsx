@@ -36,9 +36,8 @@ function Header(){
 
 
     return (
-    <div className='flex  arima-font2 flex-row justify-between bg-gradient-to-r from-white via-gray-100 to-white  mt-2
- '>
-       <div className="flex flex-col items-center gap-2 ml-4">
+    <div   className='flex  arima-font2 flex-row justify-between bg-gradient-to-r from-white via-gray-100 to-white  mt-2'>
+       <div onClick={()=>navigate('/')} className="flex flex-col items-center gap-2 ml-4">
                 <div className='w-[70px] h-[70px] rounded-xl'>
                     <img
                     className='w-full h-full object-cover rounded-xl'
