@@ -38,7 +38,7 @@ const { isLoggedIn, role } = useSelector((state) => state.auth);
 
 const requireRole=useSelector(state=>state.auth)
   return (
-<div >
+<div className=' bg-gradient-to-r from-white via-gray-100 to-white' >
 <Routes class={styles.appContainer}>
 <Route path='/auth/denied' element={<Denied/>}/>
 <Route path='/' element={<Home/>}/>

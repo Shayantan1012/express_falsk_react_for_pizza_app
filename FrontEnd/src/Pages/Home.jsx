@@ -1,8 +1,9 @@
 import pizza2 from '../assets/pizza2.png'
 import cook from'../assets/cooking1.png'
-import icon1 from'../assets/orderFood.png'
-import icon2 from'../assets/pickup.png'
-import icon3 from'../assets/enjoy.png'
+import icon1 from'../assets/icon1.svg'
+import icon2 from'../assets/icon2.svg'
+import icon3 from'../assets/icon3.svg'
+import icon4 from'../assets/icon4.svg'
 import Footer from '../Components/Footer';
 import Header from '../Components/header';
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +11,16 @@ import { getAllProducts } from '../Redux/Slice/ProductSlice'
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import ImagePopUp from './AI_page/Image_pop_up'
+import OverlappingFoodImages from '../Components/overLappedImages'
+import Slider from '../Components/slider'
+import img1 from "../assets/berger.webp";
+import img2 from "../assets/dhokla.webp";
+import img3 from "../assets/dal_makhni.webp";
+import img4 from "../assets/kulfi.webp";
+import img5 from "../assets/jelabi.webp";
+import img6 from "../assets/masala dosa.webp";
+// import img7 from "../assets/Masala_Chai.webp";
+
 
 function Home(){
 const dispatch=useDispatch();
@@ -18,27 +29,45 @@ useEffect(()=>{
     dispatch(getAllProducts());
 },[])
 
+const images=[
+    img1,
+    img2,
+    img3,
+    img4,
+    img5,
+    img6,
+    
+]
+
+
+function handleClick() {
+  navigate('/product/allProduct'); // change '/menu' if your route is different
+}
+
+
 const{productsData}=useSelector((state)=>(state.product));
 return(
     <div className=''>
             <Header/>
 
-   <section className="z-10  flex flex-col-reverse items-center justify-items-center py-4 justify-center md:flex-row  bg-gradient-to-r from-amber-50 to-orange-300">
+   <section className="z-10  flex flex-col-reverse items-center justify-items-center py-4 justify-center md:flex-row bg-gradient-to-r from-white via-gray-100 to-white">
     < div className=" w-4/6 ml-4 flex flex-col justify-between  text-5xl text-center md:w-2/6 md:text-left">
     <div className="flex justify-center md:justify-start">
             <div className="flex flex-row justify-between ">
                  
-                    <h1 className="pb-2 afacad-flux-font3  text-transparent bg-gradient-to-r from-orange-400 to-red-500   bg-clip-text font-bold">Enjoy the Slice {" "}</h1>
+                <h1 className="pb-2 afacad-flux-font3 text-transparent bg-gradient-to-r from-yellow-500 to-amber-700 bg-clip-text font-bold">
+                Savor the Taste of India
+                </h1>
                     <div>
                         😃
                     </div>
             </div>
     </div> 
             
-    <div className="text-sm arima-font2 font-bold mt-3 mb-3 italic text-slate-600">
-                The Pizza App lets you order your favorite pizza from the comfort of your home. 
-                Enjoy the best pizza in town with just a few clicks.
-    </div>
+        <div className="text-sm arima-font2 font-bold mt-3 mb-3 italic text-slate-600">
+        Discover authentic Indian flavors delivered to your doorstep. From spicy street food to rich traditional dishes, satisfy every craving with just a few taps.
+        </div>
+
             <div className="flex justify-center md:justify-start">
                 <div className="flex  shadow-lg justify-items-center items-center  basis-[40%] px-4 py-2 rounded-md justify-between bg-yellow-400 hover:bg-yellow-200">
                     
@@ -55,98 +84,90 @@ return(
             </div>
     
     </div>
-    <div>
-        <img
-       src={pizza2}
-       width={550}
-       height={550}
-        />
-    </div>
+    <OverlappingFoodImages/>
+
+</section>
+
+<section className='flex flex-col md:flex-col  justify-center md:justify-between mb-2 py-5 md:flex-row bg-gradient-to-r from-white via-gray-100 to-white space-x-* mt-2'>
+<div className='afacad-flux-font3 font-extrabold  flex flex-col md:flex-row  justify-center md:justify-start'>
+
+    <Slider images={images}/>
+
+
+
+    <div className='flex flex-col items-center justify-center md:justify-start'>
+        <div className='text-5xl afacad-flux-font5 font-extrabold bg-gradient-to-l mt-6 ml-4 from-yellow-500 to-orange-600 text-transparent bg-clip-text'>
+            Crafted by India’s Finest <br /> Culinary Experts
+        </div>
+        <p className='text-base mt-3 leading-relaxed font-semibold text-orange-700 ml-4'>
+            Why Swad Desi is the ultimate destination for Indian food lovers:
+        </p>
+
+        <div className="space-y-6 mt-6 ml-6">
+            {[
+            "Authentic regional flavors from across India",
+            "Freshly prepared with premium, hygienic ingredients",
+            "Delivered hot & fast, right to your doorstep",
+            ].map((text, idx) => (
+            <div key={idx} className='flex items-center'>
+                <div className='text-amber-500 w-10 h-10 flex items-center justify-center'>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75" />
+                </svg>
+                </div>
+                <div className='text-xl afacad-flux-font5 font-bold ml-4 bg-gradient-to-l from-yellow-600 to-orange-500 text-transparent bg-clip-text'>
+                {text}
+                </div>
+            </div>
+            ))}
+        </div>
+    </div>    
+
+
+        
+</div>
+    <div className='flex flex-row flex-wrap justify-center md:justify-between montserrat-font1 mt-10  px-4'>
+        {[
+        {
+            icon: icon1,
+            title: 'Order Desi Dishes',
+            desc: 'Browse through our wide range of Indian delicacies and place your order effortlessly.',
+        },
+        {
+            icon: icon2,
+            title: 'Track & Pickup',
+            desc: 'Track your order in real time or opt for easy pickup at your nearest location.',
+        },
+        {
+            icon: icon3,
+            title: 'Enjoy at Home',
+            desc: 'Experience the joy of authentic Indian food with friends and family in comfort.',
+        },
+       {
+            icon: icon4, // Replace or define this image
+            title: 'Freshly Cooked',
+            desc: 'All our dishes are freshly prepared by experienced chefs using the finest ingredients.',
+         },
+        ].map((card, idx) => (
+        <div
+            key={idx}
+            className='flex flex-col w-64 bg-white p-5 rounded-2xl shadow-xl hover:shadow-md transition-all duration-300 items-center text-center mx-4 my-4'
+        >
+            <div className='rounded-full bg-slate-100 h-20 w-20 mb-4 flex items-center justify-center'>
+            <img src={card.icon} alt={`icon-${idx}`} className='w-10 h-10' />
+            </div>
+            <div className='font-bold text-xl mb-2'>{card.title}</div>
+            <p className='text-sm italic text-slate-600 leading-relaxed'>{card.desc}</p>
+        </div>
+        ))}
+
+    </div> 
+
 
     </section>
-    <section className='flex flex-col md:flex-row  justify-center md:justify-between mb-2 py-5 md:flex-row bg-gradient-to-r space-x-* from-amber-50 to-orange-300 mt-2'>
-        <div className='mt-7 mb-7 ml-7 flex items-center rounded-3xl'>
-            <img className='rounded-3xl'
-             src={cook}
-             width={400}
-             height={400}
-             />
-        </div>
-        <div className='afacad-flux-font3 font-extrabold basis-[50%] flex flex-col justify-center md:justify-start '>
-                <div className='text-5xl afacad-flux-font5 font-extrabold bg-gradient-to-l mt-6 ml-4 from-orange-400 to-red-500 text-transparent bg-clip-text'>
-                    Cooked by the best <br/> chefs in the world
-                </div>
-                    <p className='text-base mt-3 leading-relaxed font-semibold text-orange-600'>
-                There are many benifits regarding to that but the main ones are:
-                    </p>
-                <div>
-                    <div className='flex flex-row items-center  ml-7 mt-7 justify-start'>
-                    <div className='text-amber-500 w-10 h-10 flex items-center justify-center'>
-                            <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                            </svg>
-                        </div>
-                        <div className='text-3xl afacad-flux-font5 font-bold ml-5 bg-gradient-to-l  from-orange-400 to-red-500 text-transparent bg-clip-text'>
-                            <span> Perfect Test</span>           
-                        </div>
 
-                    </div>
-                    <div className='flex flex-row items-center  ml-7 mt-7 justify-start '>
-                        <div className='text-amber-500 w-10 h-10 flex items-center justify-center'>
-                            <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                            </svg>
-                        </div>
-                        <div className='text-3xl afacad-flux-font5 font-bold ml-5 bg-gradient-to-l  from-orange-400 to-red-500 text-transparent bg-clip-text'>
-                            <span> Prepair Quickly</span>           
-                        </div>
 
-                    </div>
-                    <div className='flex flex-row items-center  ml-7 mt-7 justify-start'>
-                        <div className='text-amber-500 w-10 h-10 flex items-center justify-center' >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                            </svg>
-                        </div>
-                        <div className='text-3xl afacad-flux-font5 font-bold ml-5 bg-gradient-to-l  from-orange-400 to-red-500 text-transparent bg-clip-text'>
-                            <span> Food hygeine guaranted</span>           
-                        </div>
-
-                    </div>
-                </div>
-                <div className='flex justify-between montserrat-font1  mr-3 mt-9'>
-                    <div className='flex flex-col mr-5 mt-6   p-2 rounded-2xl shadow-2xl hover:shadow-none justify-center items-center'>
-                        <div className='rounded-full bg bg-slate-50 text-center h-20 w-20 mb-5 flex items-center justify-center'>
-                                <img
-                                src={icon1}
-                                />
-                        </div>
-                        <div className='font-bold text-xl mb-3'>Order Food</div>
-                        <p className='text-center italic'>As easy as 1,2,3 <br/> Just select your <br/>favorite pirzza and<br/> place your order </p>
-                    </div>
-                    <div className='flex flex-col mr-5 mt-6   p-2 rounded-2xl shadow-2xl hover:shadow-none justify-center items-center'>
-                        <div className='rounded-full bg bg-slate-50  text-center h-20 w-20 mb-5 flex items-center justify-center'>
-                                <img
-                                src={icon2}
-                                />
-                        </div>
-                        <div className='font-bold text-xl mb-3'>Pickup Food</div>
-                        <p className='text-center italic'> Pick up your order<br/> from the nearest<br/> store or get it <br/>delivered to your <br/>doorstep. </p>
-                    </div>
-                    <div className='flex flex-col mr-5 mt-6   p-2 rounded-2xl shadow-2xl hover:shadow-none justify-center items-center'>
-                        <div className='rounded-full bg bg-slate-50  text-center h-20 w-20 mb-5 flex items-center justify-center'>
-                                <img
-                                src={icon3}
-                                />
-                        </div>
-                        <div className='font-bold text-xl mb-3'>Order Food</div>
-                        <p className='text-center italic'>As soon as you get<br/> your order, enjoy the<br/> delicious pizza with<br/> your loved ones.
-                        </p>
-                    </div>
-                </div>
-
-        </div>
-    </section>
+{/* 
     <div className="mx-auto">
                 <div className="flex flex-wrap  justify-center">
                     {productsData.map((item) => {
@@ -154,7 +175,7 @@ return(
                             item.inStock && (
                                 <div className="p-4 md:w-1/3" key={item._id}>
                                     <Link to={`/product/${item._id}`}>
-                                        <div className="overflow-hidden border shadow-xl hover:shadow-2xl rounded-lg border-opacity-60">
+                                    <div className="overflow-hidden border shadow-xl hover:shadow-2xl rounded-lg border-opacity-60 transform transition-transform duration-500 ease-in-out hover:scale-105">
                                             <img 
                                                 src={item.productImage}
                                                 alt="Pizza Image"
@@ -181,7 +202,23 @@ return(
                         )
                     })}
                 </div>
-            </div>
+            </div> */}
+
+<div className='w-full flex flex-row justify-center items-center bg-gradient-to-r from-white via-gray-100 to-white'>
+        <button
+        onClick={handleClick}
+        className="flex flex-row arima-font2 px-6 py-3 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-xl font-bold text-lg shadow-md hover:scale-105 transition-transform duration-300 ease-in-out"
+        >
+        Explore Menu
+                    <span className="transition-transform ease-in-out hover:translate-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                        </svg>
+                    </span>        
+        </button>
+
+
+</div>
 
             
 

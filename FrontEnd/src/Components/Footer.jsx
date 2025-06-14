@@ -2,7 +2,8 @@
 function Footer() {
     return (
           <footer className="montserrat-font1 text-gray-600 body-font ">
-            <div className="bg-gradient-to-r from-amber-50 to-orange-300">
+            <div className="bg-gradient-to-r from-white via-gray-100 to-white space-x-* mt-2
+">
               <div className="container flex flex-col flex-wrap px-5 py-10 mx-auto sm:flex-row">
                 <p className="text-sm text-center text-gray-500 sm:text-left">
                     &copy; 2024 Pizza App                    

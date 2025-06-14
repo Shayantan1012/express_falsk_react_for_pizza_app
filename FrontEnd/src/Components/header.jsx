@@ -1,4 +1,4 @@
-import pizzalogo from '../assets/pizza1.png'
+import pizzalogo from '../assets/swad desi.png'
 import{useSelector} from 'react-redux'
 import { logout } from '../Redux/Slice/AuthSlice';
 import {Link, useNavigate} from 'react-router-dom'
@@ -36,16 +36,19 @@ function Header(){
 
 
     return (
-    <div className='flex  arima-font2 flex-row justify-between bg-gradient-to-r from-amber-50 to-orange-300 '>
+    <div className='flex  arima-font2 flex-row justify-between bg-gradient-to-r from-white via-gray-100 to-white  mt-2
+ '>
        <div className="flex flex-col items-center gap-2 ml-4">
-                <div>
+                <div className='w-[70px] h-[70px] rounded-xl'>
                     <img
+                    className='w-full h-full object-cover rounded-xl'
                     src={pizzalogo}
                     />
                 </div>
-                <div className="font-semibold arima-font2  text-slate-700">
-                Pizza Delight
-                </div>
+          <div className=" font-semibold arima-font2 text-xl sm:text-3xl md:text-4xl bg-gradient-to-r from-orange-600 to-yellow-400 text-transparent bg-clip-text drop-shadow-sm">
+            Swad Desi
+            </div>
+
 
         </div>
         <div className=' hidden md:flex item-center '>

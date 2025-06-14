@@ -5,7 +5,7 @@ function AddProductPresentation({handelProductInput,submitProductForm,handleImag
 return (
     <div>
         <Header/>
-    <div className='flex montserrat-font1 flex-col md:flex-row bg-gradient-to-r from-amber-50 to-orange-300 justify-center md:justify-between'>
+    <div className='flex montserrat-font1 flex-col md:flex-row bg-gradient-to-r from-gray-50 to-white-300 justify-center md:justify-between'>
         <div className='hidden md:flex justify-center items-center '>
           <img
           src={addProductSvg}
