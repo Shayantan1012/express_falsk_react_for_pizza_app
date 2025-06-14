@@ -39,7 +39,8 @@ return(
               <div className="flex-none w-full mx-auto lg:max-w-2xl xl:max-w-4xl">
                 <div className="space-y-6">
                   {cartDetails?.items.map((item) => (
-                    <div key={item._id} className="p-4 text-gray-900 rounded-lg shadow-sm bg-gradient-to-r from-amber-50 to-orange-300 md:p-6 border">
+                    <div key={item._id} className="p-4 text-gray-900 rounded-lg shadow-sm bg-gradient-to-r from-white via-gray-100 to-white space-x-* mt-2
+ md:p-6 border">
                       <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
                         <img
                           className="hidden w-20 h-20 dark:block rounded-md"
@@ -90,7 +91,8 @@ return(
               </div>
 
               <div className="flex-1 max-w-4xl mx-auto mt-6 space-y-6 lg:mt-0 lg:w-full">
-                <div className="p-4 space-y-4 text-gray-800 border rounded-lg shadow-sm bg-gradient-to-r from-amber-50 to-orange-300 sm:p-6">
+                <div className="p-4 space-y-4 text-gray-800 border rounded-lg shadow-sm bg-gradient-to-r from-white via-gray-100 to-white space-x-* mt-2
+ sm:p-6">
                   <p className="text-xl font-semibold text-gray-900 ">
                     Order summary
                   </p>

@@ -53,7 +53,8 @@ function Header(){
         </div>
         <div className=' hidden md:flex item-center '>
         <ul className='flex items-center gap-5 mr-9 font-semibold '>
-        <div className='flex items-center justify-center relative'>
+            {
+                isLoggedIn?        <div className='flex items-center justify-center relative'>
         <div onClick={() => setPopUp(true)} className='p-2 rounded-bl-sm rounded-tl-sm  shadow-lg  transition-transform duration-300 ease-in-out transform hover:scale-110 hover:shadow-lg shadow-md rounded-md'>
         <img
             src={CamIcon}
@@ -77,6 +78,8 @@ function Header(){
         </div>
         
         </div>
+:null
+            }
 
 
         <button onClick={()=>navigate('/')} className='text-slate-600 hover:text-slate-800 shadow-xl hover:shadow-lg rounded-lg p-2'>Home {' '}</button>
