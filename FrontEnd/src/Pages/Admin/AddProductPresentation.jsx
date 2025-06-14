@@ -95,7 +95,7 @@ return (
             required
             name='imageURL'
             id='imageURL'
-            accept='.jpg,.png,.jpeg'
+            accept='.jpg,.png,.jpeg,.webp'
             onChange={handleImageChange}
             className='w-full h-[50px] mb-3 ml-4 mt-2 pl-2 rounded-lg focus:border-indigo-500 sm:text-sm'
             />      

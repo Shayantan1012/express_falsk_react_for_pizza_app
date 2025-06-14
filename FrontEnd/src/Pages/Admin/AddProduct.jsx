@@ -22,7 +22,7 @@ const [productInput,setProductInput]=useState({
 function handleImageChange(e) {
   const file = e.target.files[0]; // Get the first selected file
   if (file) {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']; // Valid file types
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg','image/webp']; // Valid file types
     if (!allowedTypes.includes(file.type)) {
       toast.error("Invalid file type. Please upload .jpg, .png, or .jpeg.");
       return;

@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllProducts } from '../Redux/Slice/ProductSlice'
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import ImagePopUp from './AI_page/Image_pop_up'
+
 function Home(){
 const dispatch=useDispatch();
 const navigate=useNavigate();
