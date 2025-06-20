@@ -4,3 +4,8 @@ torchvision
 transformers 
 pillow
 flask-cors
+# pyttx3
+groq
+langchain
+langchain-community
+langchain-ollama
