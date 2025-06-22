@@ -81,8 +81,9 @@ function ImagePopUp({ closePopUp }) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-500 bg-opacity-50">
-            <div className="w-[90vw] h-[90vh] sm:w-[80vw] md:w-[65vw] lg:w-[55vw] bg-slate-800 bg-opacity-80 rounded-2xl overflow-y-auto p-4">
-                <div className="flex flex-col items-center justify-between h-full w-full">
+        <div className="montserrat-font1 w-[90vw] h-[90vh] sm:w-[80vw] md:w-[65vw] lg:w-[55vw] 
+                    bg-gradient-to-br from-black via-white-600 to-white-400 
+                    rounded-2xl p-6 overflow-y-auto relative">                <div className="flex flex-col items-center justify-between h-full w-full">
                     <div className="w-full flex justify-end items-center">
                         <span className="close text-4xl text-white cursor-pointer" onClick={closePopUp}>&times;</span>
                     </div>

@@ -51,7 +51,7 @@ function Header(){
 
         </div>
         <div className=' hidden md:flex item-center '>
-        <ul className='flex items-center gap-5 mr-9 font-semibold '>
+        <ul className='montserrat-font1 flex items-center gap-5 mr-9 font-semibold '>
             {
                 isLoggedIn?        <div className='flex items-center justify-center relative'>
         <div onClick={() => setPopUp(true)} className='p-2 rounded-bl-sm rounded-tl-sm  shadow-lg  transition-transform duration-300 ease-in-out transform hover:scale-110 hover:shadow-lg shadow-md rounded-md'>
@@ -72,7 +72,7 @@ function Header(){
             transform ${camInfo ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
             `}
         >
-            <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-t border-l border-gray-300 rotate-45"></div>
+        <div className="absolute -top-2 right-6 w-4 h-4 bg-white border-t border-l border-gray-300 rotate-45"> </div>
             Give an image and get the order!!
         </div>
         
