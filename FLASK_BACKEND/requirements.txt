@@ -10,3 +10,5 @@ groq
 # langchain-community
 # langchain-ollama
 Flask-PyMongo
+pandas
+pymongo

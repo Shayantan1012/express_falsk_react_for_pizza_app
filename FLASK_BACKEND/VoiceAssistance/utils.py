@@ -1,3 +1,4 @@
+
 class PromptManager():
     def __init__(self, user_prompt):
         self.user_prompt = user_prompt
@@ -138,3 +139,16 @@ class PredefinedResponseManager():
 
 
         return product_added_responses
+
+
+    def product_not_available(self):
+        product_not_available_responses = [
+            "Sorry, we don't have enough stock for that product.",
+            "Unfortunately, we can't fulfill that request due to insufficient stock.",
+            "We apologize, but we don't have enough of that product available.",
+            "Regrettably, we can't add that item to your cart because of low stock.",
+            "I'm sorry, but we can't process that order due to stock limitations.",
+            "Unfortunately, we can't add that product to your cart as we don't have enough in stock.",
+        ]
+        
+        return product_not_available_responses
