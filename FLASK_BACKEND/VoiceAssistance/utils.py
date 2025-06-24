@@ -152,3 +152,16 @@ class PredefinedResponseManager():
         ]
         
         return product_not_available_responses
+    
+    def product_added_to_cart_query(self):
+        product_added_to_cart_query = [
+            "Do you want to add the items to your cart?",
+            "Would you like to proceed with adding these items to your cart?",
+            "Shall I add these products to your cart?",
+            "Do you want me to add these items to your shopping cart?",
+            "Should I go ahead and add these products to your cart?",
+            "Would you like to confirm adding these items to your cart?",
+            "Do you want to proceed with adding these products to your cart?",
+        ]
+        return product_added_to_cart_query
+            

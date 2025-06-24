@@ -10,11 +10,15 @@ import { ColorRing } from 'react-loader-spinner';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { useSpeechSynthesis } from 'react-speech-kit';
 import SiriWaveComponent from "./siri_wave";
+import { voiceAssitenceResponse } from "../../Redux/Slice/voiceAssi";
 
 function VoiceAssistance({ closePopUp ,welcomeCheck})  {
 
   const [welcomeMessage, setWelcomeMessage] = useState(welcomeCheck());
   const [isSpeaking, setIsSpeaking] = useState(false);
+  
+  const [lastTranscript, setLastTranscript] = useState("");
+  const [pauseTimer, setPauseTimer] = useState(null);
 
 
     const products = useSelector((state) => state.product.productsData);
@@ -48,6 +52,24 @@ const speechSynthesis = (text) => {
   speak({ text: text, lang: 'en-US' , pitch:1.5});
 };
 
+async function handleVoiceCommand(transcript) {
+  try{
+    const response = await dispatch(voiceAssitenceResponse(transcript))
+    console.log("Response from Flask:", response);
+    if (response?.payload?.status === "success") {
+      console.log("Response from Flask:", response.payload.data);
+      const data = response.payload.data;
+    } 
+
+  }
+  catch (error) {
+    console.error("Error in voice command handling:", error);
+    toast.error("An error occurred while processing your command.");
+  }
+
+
+}
+
 useEffect(() => {
 
     setTimeout(() => {
@@ -57,11 +79,37 @@ useEffect(() => {
     }, 500);
 }, []);
 
+useEffect(() => {
+  if (!transcript) return;
+
+  // If transcript changed, reset the pause timer
+  if (transcript !== lastTranscript) {
+    setLastTranscript(transcript);
+
+    // Clear previous timeout
+    if (pauseTimer) {
+      clearTimeout(pauseTimer);
+    }
+
+    // Start a new pause timer (e.g. 3 seconds of no input)
+    const timer = setTimeout(() => {
+      console.log("No speech input for 3 seconds, sending data...");
+      handleVoiceCommand(transcript);  // your existing function
+      resetTranscript();               // optional: clear after send
+    }, 3000); // 3 seconds of pause
+
+    setPauseTimer(timer);
+  }
+}, [transcript]);
+
+
+
 if(welcomeMessage) {
   console.log("Welcome message triggered");
   speechSynthesis("Welcome to the Voice Assistant. How can I assist you today?");
   setWelcomeMessage(false);
 }
+
 
 
 
@@ -135,14 +183,14 @@ if(welcomeMessage) {
     <div className="flex justify-center gap-4">
 
 
-
+{/* 
     <button
         className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-2xl transition"
         onClick={() => speechSynthesis(transcript)}
 
       >
         Speak
-      </button>
+      </button> */}
 
     </div>
 
