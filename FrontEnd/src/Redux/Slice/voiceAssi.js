@@ -8,7 +8,10 @@ export const voiceAssitenceResponse = createAsyncThunk(
     async (data) => {
         try {
 
-            const response = await flaskaxiosInstance.post("/voiceAssistance", data);
+            console.log("Data sent to Flask:", data);
+
+            const response = await flaskaxiosInstance.post("/voiceAssistance", {"text":data});
+            console.log("------------>",response.data);
             if (response.status === 200) {
                 console.log("Response from Flask:", response.data);
                 return response.data; // Return the data from the response

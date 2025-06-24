@@ -5,11 +5,14 @@ USER_COLLECTION = "users"
 PRODUCT_COLLECTION = "products"
 CART_COLLECTION = "carts"
 ORDER_COLLECTION = "orders"
+FRONTEND_URL = "http://localhost:5173"
 
 
 
 
 from flask import Flask
+from flask_cors import CORS
+
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -18,6 +21,10 @@ client = MongoClient(MONGO_URL, server_api=ServerApi('1'))
 
 def create_app():
     app = Flask(__name__)
+    
+    CORS(app, origins=[FRONTEND_URL], supports_credentials=True)
+
+    
     app.config["MONGO_URI"] = MONGO_URL
     from app.routes import main  # import blueprint after mongo is ready
     app.register_blueprint(main)
