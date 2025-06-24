@@ -51,6 +51,7 @@ const speechSynthesis = (text) => {
 useEffect(() => {
 
     setTimeout(() => {
+      resetTranscript();
       startListening();
       console.log("Listening started");
     }, 500);
@@ -115,6 +116,7 @@ if(welcomeMessage) {
       stopListening()
       setIsSpeaking(!isSpeaking )
       resetTranscript()
+      navigate("/about")
       }} className="flex flex-col justify-center items-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-2xl transition ">
       <div className="flex justify-center items-center ">
         Stop Listening

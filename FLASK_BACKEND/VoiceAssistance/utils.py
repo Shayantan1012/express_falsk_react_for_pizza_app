@@ -98,3 +98,43 @@ class PromptManager():
         Output:
         '''
         return system_prompt.format(user_prompt=self.user_prompt)
+
+
+
+class PredefinedResponseManager():
+    def __init__(self):
+        pass
+
+    def product_not_found(self):
+        product_quantity_prompts = [
+            "Please tell me the product name and the quantity you'd like to add to your cart.",
+            "What product do you want to add? Please also mention how many units you need.",
+            "Sure! Could you please provide the product name and how many you want?",
+            "I can help you with that. Tell me the product and the quantity you'd like to order.",
+            "Let me know what you want to buy and how many items you need.",
+            "Please enter or say the product name followed by the quantity.",
+            "Which product are you looking for, and how many units do you want?",
+            "To proceed, I need the product name and quantity. For example, 'two ball pens'.",
+            "Alright! Just give me the name of the product and how many you want.",
+            "Before I add it to your cart, please mention both the item and the quantity."
+        ]
+
+        return product_quantity_prompts
+
+
+    def product_added_cart(self):
+        product_added_responses = [
+            "The product has been successfully added to your cart.",
+            "Got it! I've added the item to your cart.",
+            "Item successfully added to your cart.",
+            "Your product is now in the cart.",
+            "Done! The product has been added.",
+            "Successfully added the item to your cart.",
+            "The item you requested is now in your cart.",
+            "Product added. Let me know if you need anything else.",
+            "It’s in your cart! You can continue shopping.",
+            "Added to cart successfully. What would you like to do next?"
+]
+
+
+        return product_added_responses
