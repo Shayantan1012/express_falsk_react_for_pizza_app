@@ -55,12 +55,12 @@ const speechSynthesis = (text) => {
 async function handleVoiceCommand(transcript) {
   try{
     const response = await dispatch(voiceAssitenceResponse(transcript))
-    console.log("Response from Flask:", response);
-    if (response?.payload?.status === "success") {
-      console.log("Response from Flask:", response.payload.data);
-      const data = response.payload.data;
+    console.log("Response from voice command:", response);
+    if (response?.payload?.status === 200 ) {
+      const message = response?.payload?.data?.message;
+      speechSynthesis(message);
+      resetTranscript(); // Clear the transcript after processing
     } 
-
   }
   catch (error) {
     console.error("Error in voice command handling:", error);

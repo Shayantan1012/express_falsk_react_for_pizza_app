@@ -37,20 +37,20 @@ def voiceAssistanceInput():
             return jsonify({'error': 'Invalid response format from the model'}), 500
         
         
-        # if(response['intent'] == 'add_cart'):
+        if(response['intent'] == 'add_cart'):
             
-        #     order_intent = IntentService(response)
+            order_intent = IntentService(response)
         
-        #     response_data = order_intent.order_service()
+            response_data = order_intent.order_service()
             
             
-        #     if not response_data:
-        #         return jsonify({'error': 'Failed to process order service'}), 500
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
             
-        #     return jsonify({
-        #         'message': 'Successfully processed order service.',
-        #         'response': response_data
-        #     }), 200
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data
+            }), 200
             
 
             
