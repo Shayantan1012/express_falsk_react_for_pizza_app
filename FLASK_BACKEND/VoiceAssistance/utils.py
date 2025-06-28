@@ -4,88 +4,107 @@ class PromptManager():
         
     def intentPrompt(self) -> str:
         system_prompt = '''
-        You are a smart voice assistant for an e-commerce app. Your task is to:
-        
-        1. **Identify the intent** behind a user's message.
-        2. **Extract product information** if relevant.
+        You are a smart voice assistant for a food ordering app. Your task is to:
+
+        1. **Identify the user's intent** based on their message.
+        2. **Extract food item names and quantities** where applicable.
 
         ### Supported Intents:
-        - log_in: user wants to log in (e.g., "Sign in", "Let me log in")
-        - new_user: user wants to create an account (e.g., "I need an account")
-        - send_menu: user wants to see categories or main menu (e.g., "Show me the menu")
-        - home_page: user wants to go to homepage or restart (e.g., "Take me back", "Go to home")
-        - add_cart: user wants to buy or add products (e.g., "Add this", "I want to buy", "Get me this", "Put in cart")
-        - remove_from_cart: user wants to remove items (e.g., "Remove this", "Delete from cart")
-        - search_in_product: user wants to browse or find items (e.g., "Show me running shoes")
-        - product_query: user wants product info (e.g., "Does this have size 9?", "Is this waterproof?")
-        - price_intent: user asks about price (e.g., "How much is this?", "What's the price?")
-        - payment: user wants to pay or checkout (e.g., "Proceed to checkout", "Pay now")
-        - other_queries: anything else (e.g., "What’s your return policy?")
+        - log_in: user wants to log in (e.g., "Sign in", "Log me in")
+        - new_user: user wants to create a new account (e.g., "I need an account", "Register me")
+        - send_menu: user wants to see the food menu or categories (e.g., "Show me the menu", "What food do you have?")
+        - home_page: user wants to return to the home screen (e.g., "Take me home", "Go to homepage")
+        - add_cart: user wants to order or add food (e.g., "I want a burger", "Add fries", "Get me pizza")
+        - remove_from_cart: user wants to remove food items (e.g., "Remove fries", "Delete the pizza")
+        - search_in_product: user wants to search or explore food items (e.g., "Do you have biryani?", "Show me burgers")
+        - product_query: user asks for food-specific details (e.g., "Is this spicy?", "Is this vegetarian?")
+        - price_intent: user asks about pricing (e.g., "How much is this burger?", "What's the cost?")
+        - payment: user wants to pay or proceed to checkout (e.g., "I want to pay", "Proceed to checkout")
+        - other_queries: general questions (e.g., "What’s your refund policy?", "Do you offer vegan options?")
 
         ### Rules:
-        - If no product is mentioned, return an empty list.
-        - If intent is add_cart or remove_from_cart, extract each product and quantity (default 1 if not mentioned).
-        - If intent is search_in_product, product_query, or price_intent, extract product names (quantity = null).
+        - If no food item is mentioned, return an empty list.
+        - For `add_cart` and `remove_from_cart`, extract food item name(s) and quantity (default = 1 if not given).
+        - For `search_in_product`, `product_query`, or `price_intent`, extract item names only (quantity = null).
         - For all other intents, product list is empty.
 
-        ### Format:
+        ### Output Format:
         {{
         "intent": "<intent_label>",
         "products": [
-            {{"product": "<product_name>", "quantity": <quantity>}},
+            {{"product": "<item_name>", "quantity": <quantity or null>}},
             ...
         ]
         }}
 
         ### Examples:
 
-        User: "I want to buy 2 blue shoes"  
+        User: "I want to order 2 cheeseburgers and a coke"  
         Output:
         {{
         "intent": "add_cart",
         "products": [
-            {{"product": "blue shoes", "quantity": 2}}
+            {{"product": "cheeseburgers", "quantity": 2}},
+            {{"product": "coke", "quantity": 1}}
         ]
         }}
 
-        User: "Sign me in"  
-        Output:
-        {{
-        "intent": "log_in",
-        "products": []
-        }}
-
-        User: "Delete the red jacket"  
+        User: "Remove the coke from my order"  
         Output:
         {{
         "intent": "remove_from_cart",
         "products": [
-            {{"product": "red jacket", "quantity": 1}}
+            {{"product": "coke", "quantity": 1}}
         ]
         }}
 
-        User: "How much does this bag cost?"  
-        Output:
-        {{
-        "intent": "price_intent",
-        "products": [
-            {{"product": "bag", "quantity": null}}
-        ]
-        }}
-
-        User: "Is this phone waterproof?"  
+        User: "Is the biryani spicy?"  
         Output:
         {{
         "intent": "product_query",
         "products": [
-            {{"product": "phone", "quantity": null}}
+            {{"product": "biryani", "quantity": null}}
+        ]
+        }}
+        
+        User: "Do you have biryani?"  
+        Output:
+        {{
+        "intent": "product_query",
+        "products": [
+            {{"product": "biryani", "quantity": null}}
+        ]
+        }}
+        
+        User: "Do you have five biryani?"  
+        Output:
+        {{
+        "intent": "product_query",
+        "products": [
+            {{"product": "biryani", "quantity": 5}}
         ]
         }}
 
-        User: "Go back to homepage"  
+        User: "How much is the paneer pizza?"  
         Output:
         {{
-        "intent": "home_page",
+        "intent": "price_intent",
+        "products": [
+            {{"product": "paneer pizza", "quantity": null}}
+        ]
+        }}
+
+        User: "Show me the menu"  
+        Output:
+        {{
+        "intent": "send_menu",
+        "products": []
+        }}
+
+        User: "Log me in please"  
+        Output:
+        {{
+        "intent": "log_in",
         "products": []
         }}
 
@@ -96,9 +115,6 @@ class PromptManager():
         Output:
         '''
         return system_prompt.format(user_prompt=self.user_prompt)
-
-
-
 
 
 class PredefinedResponseManager():
@@ -151,6 +167,7 @@ class PredefinedResponseManager():
         ]
         
         return product_not_available_responses
+    
     
     def product_added_to_cart_query(self):
         product_added_to_cart_query = [
@@ -232,9 +249,7 @@ class PredefinedResponseManager():
         ]
         return HOME_PAGE_RESPONSES
     
-    
-        
-            
+                
     def payment_page(self):
         PAYMENT_RESPONSES = [
     "I'm redirecting you to the payment page.",

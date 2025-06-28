@@ -51,6 +51,7 @@ def voiceAssistanceInput():
                 'intent': 'add_cart'
             }), 200
             
+            
         if(response['intent'] == 'log_in'):
             
             login_intent = IntentService(response)
@@ -134,8 +135,8 @@ def voiceAssistanceInput():
                 'response': response_data,
                 'intent': 'payment'
             }), 200
+ 
             
-         
         if(response['intent'] == 'other_queries'):
             
             payment_intent = IntentService(response)
@@ -152,10 +153,63 @@ def voiceAssistanceInput():
                 'intent': 'other_queries'
             }), 200
             
-                    
+            
+        if(response['intent'] == 'search_in_product'):
+            
+            product_query_intent = IntentService(response)
+        
+            response_data = product_query_intent.product_query()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'search_in_product'
+            }), 200
+            
+            
+        if(response['intent'] == 'price_intent'):
+            
+            price_intent = IntentService(response)
+        
+            response_data = price_intent.price_query()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'price_intent'
+            }), 200
+            
+
+        if(response['intent'] == 'product_query'):
+            
+            product_description_intent = IntentService(response)
+        
+            response_data = product_description_intent.product_description_query()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'product_query'
+            }), 200
+            
+
+
         return jsonify({
             'message': 'Successfully got the response.',
-            'response': response
+            'response': response,
+            'intent' : response['intent']
         }), 200        
             
     except Exception as e:

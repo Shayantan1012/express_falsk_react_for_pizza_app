@@ -180,4 +180,88 @@ class IntentService:
         
         except Exception as e:
 
-            return   f"An error occurred in login_service: {str(e)}"                   
+            return   f"An error occurred in login_service: {str(e)}"       
+        
+        
+    def product_query(self):
+        try:
+            
+            products = find_products()
+            
+            if (len(products) == 0):
+                return "Sorry, no products are available at the moment."
+                
+                
+            available_products =[]
+            not_available_products = []
+            for product in self.intent_repository['products']:
+                product_name = product['product'].lower()
+                product_quantity = product['quantity']
+                for p in products:
+                    
+                    if p['productName'].lower() == product_name:
+                        
+                        if p['quantity'] >= product_quantity:
+                                
+                            available_products.append({"product":p['productName'], "quantity": product_quantity ,"id": str(p['_id'])})
+                            
+                        else:
+                            not_available_products.append(p['productName'])
+                        break    
+                  
+            
+            if(len(available_products) == 0):
+                return random.choice(self.predefined_response_manager.product_not_available())    
+            
+            if(len(not_available_products) > 0 and len(available_products) > 0):
+                available = ", ".join([product['product'] for product in available_products])
+                not_available = ", ".join(not_available_products)
+                return f"I found some of the items. {available} are available, but I'm sorry, {not_available} are currently out of stock."
+            
+            if(len(not_available_products) > 0 and len(available_products) == 0):
+                not_available = ", ".join(not_available_products)
+                return f"Sorry, none of the items you mentioned are in stock right now. {not_available} are currently unavailable."
+        
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"            
+        
+      
+        
+    def price_query(self):
+        try:
+            
+            products = find_products()
+            
+            if (len(products) == 0):
+                return "Sorry, no products are available at the moment."
+                
+            for product in self.intent_repository['products']:
+                product_name = product['product'].lower()
+                for p in products:
+                    if p['productName'].lower() == product_name:
+                        return f"The price of {p['productName']} is {p['price']}."
+                         
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"      
+        
+         
+        
+    def product_description_query(self):
+        try:
+            
+            products = find_products()
+            
+            if (len(products) == 0):
+                return "Sorry, no products are available at the moment."
+                
+            for product in self.intent_repository['products']:
+                product_name = product['product'].lower()
+                for p in products:
+                    if p['productName'].lower() == product_name:
+                        return f"{p['description']}."
+                         
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"                      
