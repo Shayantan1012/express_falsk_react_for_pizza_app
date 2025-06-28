@@ -10,7 +10,6 @@ from flask import request, jsonify
 @voiceBlueprint.route('/', methods=['POST'])
 def voiceAssistanceInput():
     try:
-        
         input_data = request.form['text']
         if( not input_data):
             return jsonify({'error': 'No input data provided'}), 400
@@ -51,6 +50,91 @@ def voiceAssistanceInput():
                 'message': 'Successfully processed order service.',
                 'response': response_data
             }), 200
+            
+        if(response['intent'] == 'log_in'):
+            
+            login_intent = IntentService(response)
+        
+            response_data = login_intent.login_service()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'log_in'
+            }), 200
+            
+            
+        if(response['intent'] == 'new_user'):
+            
+            newuser_intent = IntentService(response)
+        
+            response_data = newuser_intent.new_user_service()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'new_user'
+            }), 200
+            
+                           
+        if(response['intent'] == 'send_menu'):
+            
+            sendmenu_intent = IntentService(response)
+        
+            response_data = sendmenu_intent.send_menu_service()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'send_menu'
+            }), 200
+            
+            
+        if(response['intent'] == 'home_page'):
+            
+            homepage_intent = IntentService(response)
+        
+            response_data = homepage_intent.home_page_service()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'send_menu'
+            }), 200
+            
+            
+        if(response['intent'] == 'payment'):
+            
+            payment_intent = IntentService(response)
+        
+            response_data = payment_intent.home_page_service()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'send_menu'
+            }), 200
+            
             
 
             

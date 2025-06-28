@@ -100,3 +100,69 @@ class IntentService:
 
         except Exception as e:
             return f"An error occurred in order_service: {str(e)}"
+        
+    
+    def login_service(self):
+        try:
+            predefined_response_manager= PredefinedResponseManager()
+            response = self.predefined_response_manager.login_query()
+            return random.choice(response)  
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"
+        
+        
+
+    def new_user_service(self):
+        try:
+            predefined_response_manager= PredefinedResponseManager()
+            
+            response = self.predefined_response_manager.new_user()
+            
+            return random.choice(response)  
+        
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"    
+        
+        
+    
+    def send_menu_service(self):
+        try:
+            predefined_response_manager= PredefinedResponseManager()
+            
+            response = self.predefined_response_manager.show_menu()
+            
+            return random.choice(response)  
+        
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"        
+        
+        
+       
+    def home_page_service(self):
+        try:
+            predefined_response_manager= PredefinedResponseManager()
+            
+            response = self.predefined_response_manager.show_home_page()
+            
+            return random.choice(response)  
+        
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"            
+        
+        
+               
+    def payment_service(self):
+        try:
+            predefined_response_manager= PredefinedResponseManager()
+            
+            response = self.predefined_response_manager.show_home_page()
+            
+            return random.choice(response)  
+        
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"            
