@@ -3,7 +3,6 @@ from VoiceAssistance.llm_engine import llm_output
 from VoiceAssistance import voiceBlueprint
 from VoiceAssistance.service import IntentService
 import json
-
 from flask import request, jsonify
 
 
@@ -48,7 +47,8 @@ def voiceAssistanceInput():
             
             return jsonify({
                 'message': 'Successfully processed order service.',
-                'response': response_data
+                'response': response_data,
+                'intent': 'add_cart'
             }), 200
             
         if(response['intent'] == 'log_in'):
@@ -115,7 +115,7 @@ def voiceAssistanceInput():
             return jsonify({
                 'message': 'Successfully processed order service.',
                 'response': response_data,
-                'intent': 'send_menu'
+                'intent': 'home_page'
             }), 200
             
             
@@ -123,7 +123,7 @@ def voiceAssistanceInput():
             
             payment_intent = IntentService(response)
         
-            response_data = payment_intent.home_page_service()
+            response_data = payment_intent.payment_service()
             
             
             if not response_data:
@@ -132,23 +132,33 @@ def voiceAssistanceInput():
             return jsonify({
                 'message': 'Successfully processed order service.',
                 'response': response_data,
-                'intent': 'send_menu'
+                'intent': 'payment'
             }), 200
             
+         
+        if(response['intent'] == 'other_queries'):
             
-
-            
+            payment_intent = IntentService(response)
         
+            response_data = payment_intent.other_service()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'other_queries'
+            }), 200
+            
+                    
         return jsonify({
             'message': 'Successfully got the response.',
             'response': response
         }), 200        
-        
-        
-        
-        
-    
+            
     except Exception as e:
-        return jsonify({'error': f'An unexpected error occurred---: {str(e)}'}), 500
+        return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
 
 

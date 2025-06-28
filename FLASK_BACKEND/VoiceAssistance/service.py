@@ -1,6 +1,7 @@
 import random
 from VoiceAssistance.utils import PredefinedResponseManager
 from app.db_repository import find_products , add_to_cart
+from VoiceAssistance.llm_engine import llm_output
 from flask import session 
 
 class IntentService:
@@ -105,7 +106,7 @@ class IntentService:
     def login_service(self):
         try:
             predefined_response_manager= PredefinedResponseManager()
-            response = self.predefined_response_manager.login_query()
+            response = predefined_response_manager.login_query()
             return random.choice(response)  
         except Exception as e:
 
@@ -117,7 +118,7 @@ class IntentService:
         try:
             predefined_response_manager= PredefinedResponseManager()
             
-            response = self.predefined_response_manager.new_user()
+            response = predefined_response_manager.new_user()
             
             return random.choice(response)  
         
@@ -131,7 +132,7 @@ class IntentService:
         try:
             predefined_response_manager= PredefinedResponseManager()
             
-            response = self.predefined_response_manager.show_menu()
+            response =predefined_response_manager.show_menu()
             
             return random.choice(response)  
         
@@ -145,7 +146,7 @@ class IntentService:
         try:
             predefined_response_manager= PredefinedResponseManager()
             
-            response = self.predefined_response_manager.show_home_page()
+            response = predefined_response_manager.show_home_page()
             
             return random.choice(response)  
         
@@ -159,10 +160,24 @@ class IntentService:
         try:
             predefined_response_manager= PredefinedResponseManager()
             
-            response = self.predefined_response_manager.show_home_page()
+            response = predefined_response_manager.payment_page()
             
             return random.choice(response)  
         
         except Exception as e:
 
-            return   f"An error occurred in login_service: {str(e)}"            
+            return   f"An error occurred in login_service: {str(e)}"         
+        
+               
+    def other_service(self):
+        try:
+            
+            prompt = 'This is a website for food app and this is a "other_query" query. Please answer the query in a friendly manner.'
+            
+            response = llm_output(system_prompt=prompt)
+            
+            return response  
+        
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"                   
