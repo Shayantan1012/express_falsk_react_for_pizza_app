@@ -66,11 +66,61 @@ def add_to_cart(product):
             "message": "Products added to cart successfully.",
             "status": True
         }
-    
     except Exception as e:
         print(f"An error occurred while adding to cart: {str(e)}")
         return {
             "message": "An error occurred while adding to cart in database.",
             "status": False
-        }     
-                
+        }    
+
+
+def remove_from_cart(products):
+    try:
+        db = client[DB_NAME]
+        collection = db[CART_COLLECTION]
+        user_id = '6773cc029ac602eedcaf918f'
+
+        existing_cart = collection.find_one({"user": ObjectId(user_id)})
+        if existing_cart:
+            for item in products:
+                product_id = ObjectId(item['id'])
+                quantity = item['quantity']
+
+                # Reduce quantity or remove item if quantity is 0 or less
+                cart_item = next((x for x in existing_cart['items'] if x['product'] == product_id), None)
+                if cart_item:
+                    if cart_item['quantity'] > quantity:
+                        # Decrease the quantity
+                        collection.update_one(
+                            {
+                                "user": ObjectId(user_id),
+                                "items.product": product_id
+                            },
+                            {
+                                "$inc": {
+                                    "items.$.quantity": -quantity
+                                }
+                            }
+                        )
+                    else:
+                        # Remove the item completely
+                        collection.update_one(
+                            {"user": ObjectId(user_id)},
+                            {
+                                "$pull": {
+                                    "items": {"product": product_id}
+                                }
+                            }
+                        )
+
+        return {
+            "message": "Products removed from cart successfully.",
+            "status": True
+        }
+
+    except Exception as e:
+        print(f"An error occurred while removing from cart: {str(e)}")
+        return {
+            "message": "An error occurred while removing from cart in database.",
+            "status": False
+        }

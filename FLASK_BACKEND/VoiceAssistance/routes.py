@@ -205,6 +205,40 @@ def voiceAssistanceInput():
             }), 200
             
 
+        if(response['intent'] == 'remove_from_cart'):
+            
+            remove_cart_intent = IntentService(response)
+        
+            response_data = remove_cart_intent.remove_from_cart_query()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'remove_from_cart'
+            }), 200
+
+
+        if(response['intent'] == 'watch_cart'):
+            
+            watchcart_intent = IntentService(response)
+        
+            response_data = watchcart_intent.watch_cart_service()
+            
+            
+            if not response_data:
+                return jsonify({'error': 'Failed to process order service'}), 500
+            
+            return jsonify({
+                'message': 'Successfully processed order service.',
+                'response': response_data,
+                'intent': 'watch_cart'
+            }), 200
+
+
 
         return jsonify({
             'message': 'Successfully got the response.',

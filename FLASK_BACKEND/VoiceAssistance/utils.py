@@ -20,6 +20,7 @@ class PromptManager():
         - product_query: user asks for food-specific details (e.g., "Is this spicy?", "Is this vegetarian?")
         - price_intent: user asks about pricing (e.g., "How much is this burger?", "What's the cost?")
         - payment: user wants to pay or proceed to checkout (e.g., "I want to pay", "Proceed to checkout")
+        - watch_cart: user wants to view their cart (e.g., "Show my cart", "What’s in my cart?")
         - other_queries: general questions (e.g., "What’s your refund policy?", "Do you offer vegan options?")
 
         ### Rules:
@@ -48,7 +49,15 @@ class PromptManager():
             {{"product": "coke", "quantity": 1}}
         ]
         }}
+        
+        User: "Show me the cart"  
+        Output:
+        {{
+        "intent": "watch_cart",
+        "products": []
+        }}
 
+        
         User: "Remove the coke from my order"  
         Output:
         {{
@@ -264,3 +273,18 @@ class PredefinedResponseManager():
     "Opening payment section for you."
 ]
         return PAYMENT_RESPONSES
+
+
+    def watch_cart(self):
+        WATCH_CART_RESPONSES = [
+            "Here's your cart. You can review your items.",
+            "I'm showing you what's in your cart right now.",
+            "Let's take a look at your shopping cart.",
+            "Here's everything you've added to your cart.",
+            "Your cart is ready. Check out the items inside.",
+            "I've pulled up your cart for you.",
+            "Here's what you have in your shopping cart.",
+            "Let me show you the contents of your cart.",
+            "This is your current shopping cart.",
+            "You can see your cart items here."]
+        return WATCH_CART_RESPONSES

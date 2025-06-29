@@ -1,6 +1,6 @@
 import random
 from VoiceAssistance.utils import PredefinedResponseManager
-from app.db_repository import find_products , add_to_cart
+from app.db_repository import find_products , add_to_cart ,remove_from_cart
 from VoiceAssistance.llm_engine import llm_output
 from flask import session 
 
@@ -264,4 +264,50 @@ class IntentService:
                          
         except Exception as e:
 
-            return   f"An error occurred in login_service: {str(e)}"                      
+            return   f"An error occurred in login_service: {str(e)}"     
+        
+        
+        
+    def remove_from_cart_query(self):
+        
+        try:    
+            session = session.get('active_intent', None)
+            if session is None:
+                product = self.intent_repository['products']
+                
+                response = remove_from_cart(product)
+                
+                if not response:
+                    return "Failed to remove products from the cart. Please try again later."
+                if response['status'] == True:
+                    return f"{response['message']} has been removed from your cart."
+                
+                
+                
+            else:
+                product = self.intent_repository['products']
+                for p in product:
+                    product_name = p['product'].lower()
+                    for item in session['products']:
+                        if item['product'].lower() == product_name:
+                            session['products'].remove(item)
+                            return f"{item['product']} has been removed from your cart."
+                         
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"          
+        
+        
+        
+    def watch_cart_service(self):
+        try:
+            predefined_response_manager= PredefinedResponseManager()
+            
+            response =predefined_response_manager.watch_cart()
+            
+            return random.choice(response)  
+        
+        except Exception as e:
+
+            return   f"An error occurred in login_service: {str(e)}"        
+                   
