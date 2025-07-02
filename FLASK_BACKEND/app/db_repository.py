@@ -74,23 +74,36 @@ def add_to_cart(product):
         }    
 
 
-def remove_from_cart(products):
+def remove_from_cart(user_products):
     try:
         db = client[DB_NAME]
         collection = db[CART_COLLECTION]
         user_id = '6773cc029ac602eedcaf918f'
 
         existing_cart = collection.find_one({"user": ObjectId(user_id)})
-        if existing_cart:
-            for item in products:
-                product_id = ObjectId(item['id'])
-                quantity = item['quantity']
+        all_products = find_products()  # DB product list (with ID, name, etc.)
 
-                # Reduce quantity or remove item if quantity is 0 or less
+        if existing_cart:
+            for user_item in user_products:
+                user_name = user_item['product'].strip().lower().replace(" ", "")
+                user_qty = user_item['quantity']
+                product_id = None
+
+                # Match by cleaned product name
+                for p in all_products:
+                    db_name = p['productName'].strip().lower().replace(" ", "")
+                    if db_name == user_name:
+                        product_id = ObjectId(p['_id'])
+                        break
+
+                if not product_id:
+                    continue  # Skip unmatched products
+
+                # Check if product exists in cart
                 cart_item = next((x for x in existing_cart['items'] if x['product'] == product_id), None)
                 if cart_item:
-                    if cart_item['quantity'] > quantity:
-                        # Decrease the quantity
+                    if cart_item['quantity'] > user_qty:
+                        # Reduce quantity
                         collection.update_one(
                             {
                                 "user": ObjectId(user_id),
@@ -98,12 +111,12 @@ def remove_from_cart(products):
                             },
                             {
                                 "$inc": {
-                                    "items.$.quantity": -quantity
+                                    "items.$.quantity": -user_qty
                                 }
                             }
                         )
                     else:
-                        # Remove the item completely
+                        # Remove the product from cart
                         collection.update_one(
                             {"user": ObjectId(user_id)},
                             {

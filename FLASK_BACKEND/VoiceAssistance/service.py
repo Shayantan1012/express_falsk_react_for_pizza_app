@@ -352,31 +352,51 @@ class IntentService:
             else:
                 # Remove items from session cart manually
                 removed_items = []
+                updated_items = []
                 not_found_items = []
 
                 for target in product_list:
-                    target_name = target['product'].strip().lower()
+                    target_name = target['product'].strip().lower().replace(" ", "")
+                    target_quantity = target.get('quantity', 1)
                     found = False
 
                     for item in active_session.get('products', []):
-                        if item['product'].strip().lower() == target_name:
-                            active_session['products'].remove(item)
-                            removed_items.append(item['product'])
+                        item_name = item['product'].strip().lower().replace(" ", "")
+                        if item_name == target_name:
                             found = True
+                            if item['quantity'] > target_quantity:
+                                item['quantity'] -= target_quantity
+                                updated_items.append(f"{item['product']} (reduced by {target_quantity})")
+                            else:
+                                active_session['products'].remove(item)
+                                removed_items.append(item['product'])
                             break
 
                     if not found:
                         not_found_items.append(target['product'])
 
+                print("This is the active session:", active_session)
                 # Construct response
+                response_parts = []
+
+                if updated_items:
+                    response_parts.append(f"Updated quantities: {', '.join(updated_items)}.")
+
                 if removed_items:
-                    response = f"{', '.join(removed_items)} removed from your cart."
-                    if not_found_items:
-                        response += f" But I couldn't find {', '.join(not_found_items)} in your cart."
-                    return response
+                    response_parts.append(f"Removed from cart: {', '.join(removed_items)}.")
 
-                return "None of the items you mentioned were found in your cart."
+                if not_found_items:
+                    response_parts.append(f"Couldn't find: {', '.join(not_found_items)} in your cart.")
+                    
+                if active_session.get('products', []):
+                    session['active_intent'] = active_session
+                    return random.choice(self.predefined_response_manager.product_added_cart())
+                        
 
+                if not response_parts:
+                    return "None of the items you mentioned were found in your cart."
+
+                return " ".join(response_parts)
         except Exception as e:
             return f"An error occurred in remove_from_cart_query: {str(e)}"
   

@@ -45,8 +45,8 @@ def voiceAssistanceInput():
                     'message': 'No active intent to confirm.',
                     'response': random.choice([
                 "Hmm, there's nothing to confirm right now. Would you like to place an order or see the menu?",
-                "I’m not sure what you're confirming — let me know what you want to do next.",
-                "There’s no current action to proceed with. Want to browse the menu or check your cart?",
+                "I'm not sure what you're confirming — let me know what you want to do next.",
+                "There's no current action to proceed with. Want to browse the menu or check your cart?",
                 "You said yes, but I don't have any action to confirm. Try telling me what you'd like to do!",         
                 ]),
                     'intent': 'confirm_intent'
@@ -54,8 +54,7 @@ def voiceAssistanceInput():
             except Exception as e:
                 return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
                 
-        
-        
+               
         if ( response['intent'] == 'cancel_intent'):
             session.pop('active_intent', None)
             return jsonify({
@@ -69,6 +68,7 @@ def voiceAssistanceInput():
                 ]),
                 'intent': 'cancel_intent'
             }), 200
+ 
         
         if(response['intent'] == 'add_cart'  or (response['intent'] == 'confirm_intent' and active_intent['intent']!=None and active_intent['intent'] == 'add_cart')):
             
@@ -245,8 +245,7 @@ def voiceAssistanceInput():
             remove_cart_intent = IntentService(response)
         
             response_data = remove_cart_intent.remove_from_cart_query()
-            
-            
+                        
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
             
@@ -272,7 +271,6 @@ def voiceAssistanceInput():
                 'response': response_data,
                 'intent': 'watch_cart'
             }), 200
-
 
 
         return jsonify({
