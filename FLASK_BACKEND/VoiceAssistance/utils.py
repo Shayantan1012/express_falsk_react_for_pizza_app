@@ -307,3 +307,17 @@ class PredefinedResponseManager():
             "You can go ahead and add that item to your cart.",
             "That product is available and ready for you."]
         return PRODUCT_AVAILABLE_RESPONSES
+    
+    def updated_cart(self):
+        UPDATED_CART_RESPONSES = [
+            "Your cart has been updated successfully.Now ",
+            "I've made the changes to your cart.",
+            "Your cart is now up to date.",
+            "The items in your cart have been modified.",
+            "I've updated your cart with the latest changes.",
+            "Your shopping cart has been refreshed.",
+            "The cart has been adjusted as per your request.",
+            "I've applied the updates to your cart.",
+            "Your cart reflects the latest changes now.",
+            "The modifications to your cart are complete."]
+        return UPDATED_CART_RESPONSES
