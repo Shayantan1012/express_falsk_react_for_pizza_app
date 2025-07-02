@@ -10,29 +10,58 @@ import CartDetails from './Pages/Cart/cartDeteails'
 import Order from './Pages/Order/Order'
 import OrderSuccess from './Pages/Order/OrderSuccess'
 import RequireAuth from './Components/Auth/RequireAuth'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import AllProductDetails from './Pages/AllProducts'
 import styles from './App.module.scss'
 import About from './Pages/About'
 import SignUp from './Pages/Auth/SignUP'
 import VoiceAssistance from './Pages/VoiceAssistant/VoiceAssi'
 import VoiceIcon from './assets/voice.svg'
+import { welcomeMessage } from './Redux/Slice/voiceAssi'
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 function App() {
 
+  const { speak } = useSpeechSynthesis();
+const speechSynthesis = (text) => {
+  speak({ text: text, lang: 'en-US' , pitch:1.5});
+};
+
+  const dispatch = useDispatch();
   const [popUp,setPopUp]= useState(false);
   const [camInfo,setCamInfo]=useState(false);
-  const [welcomeMessage, setWelcomeMessage] = useState(true);
+  const [welcome, setWelcome] = useState(false);
 
   function closePopUp() {
         setPopUp(!popUp);
     }
 
-  function welcomeCheck() {
 
-        return popUp;
-    }  
 
+let user_Id = useSelector((state) => state?.auth?.data?.userId)
+
+// useEffect(() => {
+//   const sendWelcome = async () => {
+//     try {
+//       console.log("User ID in welcomeCheck:", user_Id);
+//       if (!user_Id) return;  // Safety check
+//       const user_info = { user_Id };
+//       const response = await dispatch(welcomeMessage(user_info));
+//       console.log("Welcome message response in voice:", response);
+
+//       const message = response?.payload?.data?.response;
+//       if (message ) {
+//         speechSynthesis(message);  // 🔊 Speak it!
+//       }
+//     } catch (error) {
+//       console.error("Error in welcomeCheck:", error);
+//     }
+//   };
+
+//   sendWelcome();
+// }, [popUp]);
+
+  
  
 
 const {cartData}=useSelector((state)=>state.cart);
@@ -62,7 +91,7 @@ const requireRole=useSelector(state=>state.auth)
 
   <div>
 {popUp ? (
-  <VoiceAssistance closePopUp={closePopUp} welcomeCheck={welcomeCheck}  />
+  <VoiceAssistance popUp={popUp} closePopUp={closePopUp}  />
 ) : null}
 
  {!popUp?

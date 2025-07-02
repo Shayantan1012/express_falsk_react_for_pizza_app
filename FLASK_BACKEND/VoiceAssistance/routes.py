@@ -2,6 +2,7 @@ from VoiceAssistance.utils import PromptManager
 from VoiceAssistance.llm_engine import llm_output
 from VoiceAssistance import voiceBlueprint
 from VoiceAssistance.service import IntentService
+from VoiceAssistance.utils import PredefinedResponseManager
 import json
 from flask import request, jsonify
 from flask import session
@@ -283,3 +284,23 @@ def voiceAssistanceInput():
         return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
 
 
+
+@voiceBlueprint.route('/welcome', methods=['POST'])
+def welcome():
+    try:
+        response = request.form.get('user_info', None)
+        print("This is the response from the welcome route:", response)
+        session['user_info']=response    
+        predefined_response_manager = PredefinedResponseManager()
+        response = predefined_response_manager.welcome_messeges()
+        
+        return jsonify({
+            'message': 'Welcome message sent successfully.',
+            'response': random.choice(response),
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
+    
+    
+    

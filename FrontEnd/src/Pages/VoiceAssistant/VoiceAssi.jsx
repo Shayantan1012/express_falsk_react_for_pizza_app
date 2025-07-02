@@ -10,32 +10,34 @@ import { ColorRing } from 'react-loader-spinner';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { useSpeechSynthesis } from 'react-speech-kit';
 import SiriWaveComponent from "./siri_wave";
-import { voiceAssitenceResponse } from "../../Redux/Slice/voiceAssi";
+import { voiceAssitenceResponse, welcomeMessage } from "../../Redux/Slice/voiceAssi";
 
-function VoiceAssistance({ closePopUp ,welcomeCheck})  {
+function VoiceAssistance({ popUp,closePopUp })  {
 
-  const [welcomeMessage, setWelcomeMessage] = useState(welcomeCheck());
+const { speak } = useSpeechSynthesis();
+
+
   const [isSpeaking, setIsSpeaking] = useState(false);
   
   const [lastTranscript, setLastTranscript] = useState("");
   const [pauseTimer, setPauseTimer] = useState(null);
+  const [welcome,setWelcome] = useState(true);
 
 
     const products = useSelector((state) => state.product.productsData);
     const dispatch = useDispatch();
-    const { speak } = useSpeechSynthesis();
 
 
     const navigate = useNavigate();
 
+    let user_Id = useSelector((state) => state?.auth?.data?.userId)
     
-
-  const {
-    transcript,
-    listening,
-    resetTranscript,
-    browserSupportsSpeechRecognition
-  } = useSpeechRecognition();
+    const {
+      transcript,
+      listening,
+      resetTranscript,
+      browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
 
   const startListening = () => SpeechRecognition.startListening({
     continuous: true,
@@ -48,19 +50,45 @@ function VoiceAssistance({ closePopUp ,welcomeCheck})  {
     return null;
   }
 
-const speechSynthesis = (text) => {
-  speak({ text: text, lang: 'en-US' , pitch:1.5});
-};
+
+const speakSynthesis = (text) => {
+  stopListening(); // 1. Stop listening to avoid feedback
+
+  speak({
+    text,
+    lang: 'en-US',
+    pitch: 1.5,
+    onend: () => {
+      // 2. Resume listening when speech ends
+      startListening();
+    }
+  });
+}
+
+
 
 async function handleVoiceCommand(transcript) {
   try{
-    const response = await dispatch(voiceAssitenceResponse(transcript))
-    console.log("Response from voice command:", response);
-    if (response?.payload?.status === 200 ) {
-      const message = response?.payload?.data?.message;
-      speechSynthesis(message);
-      resetTranscript(); // Clear the transcript after processing
-    } 
+    if(!welcome){
+      const response = await dispatch(voiceAssitenceResponse(transcript))
+      console.log("Response from voice command :----->", response);
+      if (response?.payload?.status == 200 ) {
+        const message = response?.payload?.data?.response;
+        speakSynthesis(message);
+        resetTranscript(); // Clear the transcript after processing
+      } 
+    }
+    else{
+      const response = await dispatch(voiceAssitenceResponse("I want a welcome messege."))
+      setWelcome(false); // Reset welcome state after processin
+      if (response?.payload?.data?.response) {
+        console.log("Response from welcome command:----->", response);
+        const message = response?.payload?.data?.response;
+        console.log(message)
+        speakSynthesis(message);
+        resetTranscript(); // Clear the transcript after processing
+      }
+    }
   }
   catch (error) {
     console.error("Error in voice command handling:", error);
@@ -70,14 +98,35 @@ async function handleVoiceCommand(transcript) {
 
 }
 
+    useEffect(() => {
+      const sendWelcome = async () => {
+        try {
+          if (!user_Id) return;  // Safety check
+          const user_info = { user_Id };
+          const response = await dispatch(welcomeMessage(user_info));
+          if (response?.payload?.status==200) {
+            setWelcome(true)  // 🔊 Speak it!
+          }
+        } catch (error) {
+          console.error("Error in welcomeCheck:", error);
+        }
+      };
+    
+      sendWelcome();
+    }, [popUp]);
+    
+
+
 useEffect(() => {
 
     setTimeout(() => {
       resetTranscript();
       startListening();
       console.log("Listening started");
-    }, 500);
+    },0);
 }, []);
+
+
 
 useEffect(() => {
   if (!transcript) return;
@@ -101,16 +150,6 @@ useEffect(() => {
     setPauseTimer(timer);
   }
 }, [transcript]);
-
-
-
-if(welcomeMessage) {
-  console.log("Welcome message triggered");
-  speechSynthesis("Welcome to the Voice Assistant. How can I assist you today?");
-  setWelcomeMessage(false);
-}
-
-
 
 
     return (

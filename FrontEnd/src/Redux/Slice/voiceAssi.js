@@ -11,7 +11,6 @@ export const voiceAssitenceResponse = createAsyncThunk(
             formData.append("text", data);
 
             const response = await flaskaxiosInstance.post("/voiceAssistance", formData);
-            console.log("------------>",response);
             if (response.status === 200) {
                 return response; // Return the data from the response
             } else {
@@ -26,7 +25,28 @@ export const voiceAssitenceResponse = createAsyncThunk(
             console.error("Error in voiceAssitenceResponse:", error);
             throw error;
         }
+    }
+)
 
 
+export const welcomeMessage = createAsyncThunk(
+    "voiceAssitence/welcomeMessage",
+    async (data) => {
+        try {
+            const formData = new FormData();
+            formData.append("user_info", data.userId);
+
+            const response = await flaskaxiosInstance.post("/voiceAssistance/welcome", formData);
+            if (response.status === 200) {
+                return response; // Return the data from the response
+            } else {
+                console.error("Error in response:", response.statusText);
+                throw new Error("Failed to fetch response from Flask");
+            }
+        }
+        catch (error) {
+            console.error("Error in welcomeMessage:", error);
+            throw error;
+        }
     }
 )

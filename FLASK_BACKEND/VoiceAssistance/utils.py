@@ -321,3 +321,18 @@ class PredefinedResponseManager():
             "Your cart reflects the latest changes now.",
             "The modifications to your cart are complete."]
         return UPDATED_CART_RESPONSES
+    
+    def welcome_messeges(self):
+        welcome_responses = [
+            "Welcome to Swad Desi! What would you like to eat today?",
+            "Hi there! Craving something desi and delicious?",
+            "Namaste! Swad Desi is ready to serve you something tasty!",
+            "Welcome back to Swad Desi — your desi food journey starts here!",
+            "Hello! Ready to explore the Swad Desi menu?",
+            "Nice to see you again at Swad Desi! What's on your mind today?",
+            "Hungry? Swad Desi has something mouth-watering waiting for you!",
+            "Hey foodie! Let’s find something amazing to eat at Swad Desi!",
+            "Welcome! Swad Desi is your assistant for all things delicious and desi.",
+            "Let’s get started — biryani, chole bhature, or something sweet from Swad Desi?"
+        ]
+        return welcome_responses            

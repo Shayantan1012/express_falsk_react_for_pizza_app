@@ -23,7 +23,7 @@ def add_to_cart(product):
         db = client[DB_NAME]
         collection = db[CART_COLLECTION]
         # user_id = session.get('user_id')
-        user_id = '6773cc029ac602eedcaf918f'
+        user_id = session.get('user_id', None)  # Default user ID for testing
         
         # Check if the user already has a cart
         existing_cart = collection.find_one({"user": ObjectId(user_id)})
@@ -78,7 +78,7 @@ def remove_from_cart(user_products):
     try:
         db = client[DB_NAME]
         collection = db[CART_COLLECTION]
-        user_id = '6773cc029ac602eedcaf918f'
+        user_id = session.get('user_id', None)  # Default user ID for testing
 
         existing_cart = collection.find_one({"user": ObjectId(user_id)})
         all_products = find_products()  # DB product list (with ID, name, etc.)
