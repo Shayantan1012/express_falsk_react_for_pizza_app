@@ -12,3 +12,4 @@ groq
 Flask-PyMongo
 pandas
 pymongo
+rapidfuzz

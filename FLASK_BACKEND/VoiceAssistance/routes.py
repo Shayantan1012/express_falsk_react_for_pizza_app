@@ -4,6 +4,8 @@ from VoiceAssistance import voiceBlueprint
 from VoiceAssistance.service import IntentService
 import json
 from flask import request, jsonify
+from flask import session
+import random
 
 
 @voiceBlueprint.route('/', methods=['POST'])
@@ -34,8 +36,41 @@ def voiceAssistanceInput():
         if not isinstance(response, dict):
             return jsonify({'error': 'Invalid response format from the model'}), 500
         
+        active_intent = session.get('active_intent', None) 
         
-        if(response['intent'] == 'add_cart'):
+        
+        if( response['intent'] == 'confirm_intent' and active_intent is None):
+            try:
+                return jsonify({
+                    'message': 'No active intent to confirm.',
+                    'response': random.choice([
+                "Hmm, there's nothing to confirm right now. Would you like to place an order or see the menu?",
+                "I’m not sure what you're confirming — let me know what you want to do next.",
+                "There’s no current action to proceed with. Want to browse the menu or check your cart?",
+                "You said yes, but I don't have any action to confirm. Try telling me what you'd like to do!",         
+                ]),
+                    'intent': 'confirm_intent'
+                }), 200
+            except Exception as e:
+                return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
+                
+        
+        
+        if ( response['intent'] == 'cancel_intent'):
+            session.pop('active_intent', None)
+            return jsonify({
+                'message': 'Intent cancelled successfully.',
+                'response': random.choice([
+                    "Okay, I have cancelled that for you.",
+                    "Sure, I have cancelled.",
+                    "No problem, I have cancelled that.",
+                    "Alright, I have cancelled that for you.",
+                    "Got it, I have cancelled that for you.",
+                ]),
+                'intent': 'cancel_intent'
+            }), 200
+        
+        if(response['intent'] == 'add_cart'  or (response['intent'] == 'confirm_intent' and active_intent['intent']!=None and active_intent['intent'] == 'add_cart')):
             
             order_intent = IntentService(response)
         

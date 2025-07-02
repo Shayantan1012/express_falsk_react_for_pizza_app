@@ -1,5 +1,5 @@
 API_KEY='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'
-MODEL_NAME='compound-beta'
+MODEL_NAME='gemma2-9b-it'
 TEMPARATURE=0.6
 MAX_TOKENS=4096
 # "deepseek-r1-distill-llama-70b"

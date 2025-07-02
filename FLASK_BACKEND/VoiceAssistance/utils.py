@@ -4,128 +4,133 @@ class PromptManager():
         
     def intentPrompt(self) -> str:
         system_prompt = '''
-        You are a smart voice assistant for a food ordering app. Your task is to:
+    You are a smart voice assistant for a food ordering app. Your task is to return only a valid **raw JSON object** — no explanations, no markdown, no backticks.
 
-        1. **Identify the user's intent** based on their message.
-        2. **Extract food item names and quantities** where applicable.
+    ### Your Goals:
+    1. Identify the user's **intent** from their message.
+    2. Extract **food item names and quantities**, only if applicable.
 
-        ### Supported Intents:
-        - log_in: user wants to log in (e.g., "Sign in", "Log me in")
-        - new_user: user wants to create a new account (e.g., "I need an account", "Register me")
-        - send_menu: user wants to see the food menu or categories (e.g., "Show me the menu", "What food do you have?")
-        - home_page: user wants to return to the home screen (e.g., "Take me home", "Go to homepage")
-        - add_cart: user wants to order or add food (e.g., "I want a burger", "Add fries", "Get me pizza")
-        - remove_from_cart: user wants to remove food items (e.g., "Remove fries", "Delete the pizza")
-        - search_in_product: user wants to search or explore food items (e.g., "Do you have biryani?", "Show me burgers")
-        - product_query: user asks for food-specific details (e.g., "Is this spicy?", "Is this vegetarian?")
-        - price_intent: user asks about pricing (e.g., "How much is this burger?", "What's the cost?")
-        - payment: user wants to pay or proceed to checkout (e.g., "I want to pay", "Proceed to checkout")
-        - watch_cart: user wants to view their cart (e.g., "Show my cart", "What’s in my cart?")
-        - other_queries: general questions (e.g., "What’s your refund policy?", "Do you offer vegan options?")
+    ### Supported Intents:
+    - confirm_intent: user confirms a previous intent or action (e.g., "Yes", "Sure", "That's right", "Please proceed" , "Go ahead" , "Ok")
+    - cancel_intent: user cancels or denies a previous intent (e.g., "No", "Nevermind", "I changed my mind", "Forget it")
+    - log_in: user wants to log in (e.g., "Sign in", "Log me in")
+    - new_user: user wants to create a new account (e.g., "Register me", "I need an account")
+    - send_menu: user wants to view the menu or categories (e.g., "What food do you have?")
+    - home_page: user wants to return to the home page (e.g., "Take me home")
+    - add_cart: user wants to order/add food (e.g., "I want a burger", "Add fries")
+    - remove_from_cart: user wants to remove items (e.g., "Remove coke")
+    - search_in_product: user wants to search or explore food (e.g., "Do you have biryani?")
+    - product_query: user asks about food properties (e.g., "Is it spicy?")
+    - price_intent: user asks about cost (e.g., "How much is the burger?")
+    - payment: user wants to pay or checkout
+    - watch_cart: user wants to see their cart
+    - other_queries: general questions not covered by the above
 
-        ### Rules:
-        - If no food item is mentioned, return an empty list.
-        - For `add_cart` and `remove_from_cart`, extract food item name(s) and quantity (default = 1 if not given).
-        - For `search_in_product`, `product_query`, or `price_intent`, extract item names only (quantity = null).
-        - For all other intents, product list is empty.
+    ### Output Rules:
+    - Return a raw JSON object, nothing else.
+    - For intents not involving food items, `products` should be an empty list.
+    - For `add_cart` or `remove_from_cart`, extract `product` and `quantity` (default to 1 if not specified).
+    - For `search_in_product`, `product_query`, `price_intent`: extract `product`, use `quantity: null`.
 
-        ### Output Format:
-        {{
-        "intent": "<intent_label>",
-        "products": [
-            {{"product": "<item_name>", "quantity": <quantity or null>}},
-            ...
-        ]
-        }}
+    ### Output Format:
+    {{
+    "intent": "<intent_label>",
+    "products": [
+        {{"product": "<item_name>", "quantity": <number or null>}}
+    ]
+    }}
 
-        ### Examples:
+    ### Examples:
 
-        User: "I want to order 2 cheeseburgers and a coke"  
-        Output:
-        {{
-        "intent": "add_cart",
-        "products": [
-            {{"product": "cheeseburgers", "quantity": 2}},
-            {{"product": "coke", "quantity": 1}}
-        ]
-        }}
-        
-        User: "Show me the cart"  
-        Output:
-        {{
-        "intent": "watch_cart",
-        "products": []
-        }}
+    User: "I want to order 2 cheeseburgers and a coke"  
+    Output:
+    {{
+    "intent": "add_cart",
+    "products": [
+        {{"product": "cheeseburgers", "quantity": 2}},
+        {{"product": "coke", "quantity": 1}}
+    ]
+    }}
 
-        
-        User: "Remove the coke from my order"  
-        Output:
-        {{
-        "intent": "remove_from_cart",
-        "products": [
-            {{"product": "coke", "quantity": 1}}
-        ]
-        }}
+    User: "Show me the cart"  
+    Output:
+    {{
+    "intent": "watch_cart",
+    "products": []
+    }}
 
-        User: "Is the biryani spicy?"  
-        Output:
-        {{
-        "intent": "product_query",
-        "products": [
-            {{"product": "biryani", "quantity": null}}
-        ]
-        }}
-        
-        User: "Do you have biryani?"  
-        Output:
-        {{
-        "intent": "product_query",
-        "products": [
-            {{"product": "biryani", "quantity": null}}
-        ]
-        }}
-        
-        User: "Do you have five biryani?"  
-        Output:
-        {{
-        "intent": "product_query",
-        "products": [
-            {{"product": "biryani", "quantity": 5}}
-        ]
-        }}
+    User: "Remove the coke from my order"  
+    Output:
+    {{
+    "intent": "remove_from_cart",
+    "products": [
+        {{"product": "coke", "quantity": 1}}
+    ]
+    }}
 
-        User: "How much is the paneer pizza?"  
-        Output:
-        {{
-        "intent": "price_intent",
-        "products": [
-            {{"product": "paneer pizza", "quantity": null}}
-        ]
-        }}
+    User: "Is the biryani spicy?"  
+    Output:
+    {{
+    "intent": "product_query",
+    "products": [
+        {{"product": "biryani", "quantity": null}}
+    ]
+    }}
 
-        User: "Show me the menu"  
-        Output:
-        {{
-        "intent": "send_menu",
-        "products": []
-        }}
+    User: "Do you have five biryani?"  
+    Output:
+    {{
+    "intent": "product_query",
+    "products": [
+        {{"product": "biryani", "quantity": 5}}
+    ]
+    }}
 
-        User: "Log me in please"  
-        Output:
-        {{
-        "intent": "log_in",
-        "products": []
-        }}
+    User: "How much is the paneer pizza?"  
+    Output:
+    {{
+    "intent": "price_intent",
+    "products": [
+        {{"product": "paneer pizza", "quantity": null}}
+    ]
+    }}
 
-        ### Now analyze the following user message:
+    User: "Show me the menu"  
+    Output:
+    {{
+    "intent": "send_menu",
+    "products": []
+    }}
 
-        User: "{user_prompt}"
+    User: "Log me in please"  
+    Output:
+    {{
+    "intent": "log_in",
+    "products": []
+    }}
 
-        Output:
-        '''
+    User: "Yes, go ahead and order"  
+    Output:
+    {{
+    "intent": "confirm_intent",
+    "products": []
+    }}
+
+    User: "No, cancel the order"  
+    Output:
+    {{
+    "intent": "cancel_intent",
+    "products": []
+    }}
+
+    ### Now analyze the following user message:
+
+    User: "{user_prompt}"
+
+    Output:
+    '''
         return system_prompt.format(user_prompt=self.user_prompt)
-
-
+        
 class PredefinedResponseManager():
     def __init__(self):
         pass
@@ -288,3 +293,17 @@ class PredefinedResponseManager():
             "This is your current shopping cart.",
             "You can see your cart items here."]
         return WATCH_CART_RESPONSES
+    
+    def product_available(self):
+        PRODUCT_AVAILABLE_RESPONSES = [
+            "Great! The product is available.",
+            "Yes, we have that product in stock.",
+            "Good news! The item you requested is available.",
+            "The product is ready for you.",
+            "Yes, we can add that to your cart.",
+            "The item is available and can be added to your order.",
+            "You can proceed with that product; it's in stock.",
+            "The product is available for purchase.",
+            "You can go ahead and add that item to your cart.",
+            "That product is available and ready for you."]
+        return PRODUCT_AVAILABLE_RESPONSES
