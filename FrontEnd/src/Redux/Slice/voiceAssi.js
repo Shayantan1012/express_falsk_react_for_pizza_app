@@ -51,3 +51,29 @@ export const welcomeMessage = createAsyncThunk(
         }
     }
 )
+
+
+
+
+
+
+export const clearSession = createAsyncThunk(
+    "voiceAssitence/clear",
+    async () => {
+        try {
+
+            const response = await flaskaxiosInstance.post("/voiceAssistance/clear");
+            if (response.status === 200) {
+                console.log("------>>>",response)
+                return response; // Return the data from the response
+            } else {
+                console.error("Error in response:", response.statusText);
+                throw new Error("Failed to fetch response from Flask");
+            }
+        }
+        catch (error) {
+            console.error("Error in welcomeMessage:", error);
+            throw error;
+        }
+    }
+)

@@ -322,18 +322,13 @@ def welcome():
 
 
 @voiceBlueprint.route('/clear', methods=['POST'])
-def welcome():
+def clear():
     try:
-        response = request.form.get('user_info', None)
-        print("This is the response from the welcome route:", response)
-        session['user_info']=response    
-        response = random.choice(response)
-        
-        speak(response)
-                
+        session.pop('user_info',None)  
+        session.pop('active_intent',None)
         return jsonify({
             'message': 'Welcome message sent successfully.',
-            'response': response,
+            'response': "Successfully removed the session!!",
         }), 200
         
     except Exception as e:

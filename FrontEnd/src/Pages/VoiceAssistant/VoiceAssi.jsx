@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { ColorRing } from 'react-loader-spinner';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import SiriWaveComponent from "./siri_wave";
-import { voiceAssitenceResponse, welcomeMessage } from "../../Redux/Slice/voiceAssi";
+import { voiceAssitenceResponse, welcomeMessage ,clearSession} from "../../Redux/Slice/voiceAssi";
 
 function VoiceAssistance({ popUp,closePopUp })  {
 
@@ -112,7 +112,17 @@ async function handleVoiceCommand(transcript) {
       sendWelcome();
     }, []);
     
+async function clear_Session() {
+  try{
+    const response =await dispatch(clearSession());
+    return response;
+  }
+  catch(error){
+    console.error("Error in clearing session:", error);
 
+  }
+  
+}
 
 
 useEffect(() => {
@@ -150,6 +160,7 @@ useEffect(() => {
         onClick={() => {
         stopListening();
         closePopUp();
+        clear_Session();
         resetTranscript();
         }}   
    aria-label="Close"
