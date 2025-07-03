@@ -2,7 +2,7 @@ from VoiceAssistance.utils import PromptManager
 from VoiceAssistance.llm_engine import llm_output
 from VoiceAssistance import voiceBlueprint
 from VoiceAssistance.service import IntentService
-from VoiceAssistance.utils import PredefinedResponseManager
+from VoiceAssistance.utils import PredefinedResponseManager, speak
 import json
 from flask import request, jsonify
 from flask import session
@@ -42,14 +42,19 @@ def voiceAssistanceInput():
         
         if( response['intent'] == 'confirm_intent' and active_intent is None):
             try:
-                return jsonify({
-                    'message': 'No active intent to confirm.',
-                    'response': random.choice([
+                
+                response =  random.choice([
                 "Hmm, there's nothing to confirm right now. Would you like to place an order or see the menu?",
                 "I'm not sure what you're confirming — let me know what you want to do next.",
                 "There's no current action to proceed with. Want to browse the menu or check your cart?",
                 "You said yes, but I don't have any action to confirm. Try telling me what you'd like to do!",         
-                ]),
+                ])
+        
+                speak(response)
+
+                return jsonify({
+                    'message': 'No active intent to confirm.',
+                    'response':response,
                     'intent': 'confirm_intent'
                 }), 200
             except Exception as e:
@@ -57,18 +62,25 @@ def voiceAssistanceInput():
                 
                
         if ( response['intent'] == 'cancel_intent'):
-            session.pop('active_intent', None)
-            return jsonify({
-                'message': 'Intent cancelled successfully.',
-                'response': random.choice([
+            try:
+                session.pop('active_intent', None)
+
+                response = random.choice([
                     "Okay, I have cancelled that for you.",
                     "Sure, I have cancelled.",
                     "No problem, I have cancelled that.",
                     "Alright, I have cancelled that for you.",
                     "Got it, I have cancelled that for you.",
-                ]),
-                'intent': 'cancel_intent'
-            }), 200
+                ])
+                speak(response)
+            
+                return jsonify({
+                    'message': 'Intent cancelled successfully.',
+                    'response': response ,
+                    'intent': 'cancel_intent'
+                }), 200
+            except Exception as e:
+                return jsonify({'error': f'An unexpected error occurred: {str(e)}'}),
  
         
         if(response['intent'] == 'add_cart'  or (response['intent'] == 'confirm_intent' and active_intent['intent']!=None and active_intent['intent'] == 'add_cart')):
@@ -77,6 +89,7 @@ def voiceAssistanceInput():
         
             response_data = order_intent.order_service()
             
+            speak(response_data)
             
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
@@ -93,7 +106,7 @@ def voiceAssistanceInput():
             login_intent = IntentService(response)
         
             response_data = login_intent.login_service()
-            
+            speak(response_data)
             
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
@@ -111,7 +124,7 @@ def voiceAssistanceInput():
         
             response_data = newuser_intent.new_user_service()
             
-            
+            speak(response_data)
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
             
@@ -127,7 +140,7 @@ def voiceAssistanceInput():
             sendmenu_intent = IntentService(response)
         
             response_data = sendmenu_intent.send_menu_service()
-            
+            speak(response_data)
             
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
@@ -145,7 +158,7 @@ def voiceAssistanceInput():
         
             response_data = homepage_intent.home_page_service()
             
-            
+            speak(response_data)
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
             
@@ -162,7 +175,7 @@ def voiceAssistanceInput():
         
             response_data = payment_intent.payment_service()
             
-            
+            speak(response_data)
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
             
@@ -179,7 +192,7 @@ def voiceAssistanceInput():
         
             response_data = payment_intent.other_service()
             
-            
+            speak(response_data)
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
             
@@ -195,7 +208,7 @@ def voiceAssistanceInput():
             product_query_intent = IntentService(response)
         
             response_data = product_query_intent.product_query()
-            
+            speak(response_data)
             
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
@@ -212,7 +225,7 @@ def voiceAssistanceInput():
             price_intent = IntentService(response)
         
             response_data = price_intent.price_query()
-            
+            speak(response_data)
             
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
@@ -230,7 +243,7 @@ def voiceAssistanceInput():
         
             response_data = product_description_intent.product_description_query()
             
-            
+            speak(response_data)
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
             
@@ -246,7 +259,7 @@ def voiceAssistanceInput():
             remove_cart_intent = IntentService(response)
         
             response_data = remove_cart_intent.remove_from_cart_query()
-                        
+            speak(response_data)
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
             
@@ -263,7 +276,7 @@ def voiceAssistanceInput():
         
             response_data = watchcart_intent.watch_cart_service()
             
-            
+            speak(response_data)
             if not response_data:
                 return jsonify({'error': 'Failed to process order service'}), 500
             
@@ -293,14 +306,37 @@ def welcome():
         session['user_info']=response    
         predefined_response_manager = PredefinedResponseManager()
         response = predefined_response_manager.welcome_messeges()
+        response = random.choice(response)
         
+        speak(response)
+                
         return jsonify({
             'message': 'Welcome message sent successfully.',
-            'response': random.choice(response),
+            'response': response,
         }), 200
         
     except Exception as e:
         return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
     
+    
+
+
+@voiceBlueprint.route('/clear', methods=['POST'])
+def welcome():
+    try:
+        response = request.form.get('user_info', None)
+        print("This is the response from the welcome route:", response)
+        session['user_info']=response    
+        response = random.choice(response)
+        
+        speak(response)
+                
+        return jsonify({
+            'message': 'Welcome message sent successfully.',
+            'response': response,
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
     
     

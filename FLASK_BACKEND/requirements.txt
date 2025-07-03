@@ -4,7 +4,7 @@ torchvision
 transformers 
 pillow
 flask-cors
-# pyttx3
+pyttsx3
 groq
 # langchain
 # langchain-community

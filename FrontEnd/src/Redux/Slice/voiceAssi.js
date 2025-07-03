@@ -3,6 +3,7 @@ import axios from "axios";
 import flaskaxiosInstance from "../../Helpers/flaskaxiosInstance";
 
 
+
 export const voiceAssitenceResponse = createAsyncThunk(
     "voiceAssitence/response",
     async (data) => {
@@ -34,7 +35,7 @@ export const welcomeMessage = createAsyncThunk(
     async (data) => {
         try {
             const formData = new FormData();
-            formData.append("user_info", data.userId);
+            formData.append("user_info", data);
 
             const response = await flaskaxiosInstance.post("/voiceAssistance/welcome", formData);
             if (response.status === 200) {

@@ -99,7 +99,7 @@ class IntentService:
                     return random.choice(self.predefined_response_manager.product_added_to_cart_query())
 
                 else:
-                    print("This is the session:", session['active_intent'])
+                    # print("This is the session:----->>", session['active_intent']['products'])
 
                     user_cart = add_to_cart(session['active_intent']['products'])
 
@@ -387,7 +387,8 @@ class IntentService:
                 if not_found_items:
                     response_parts.append(f"Couldn't find: {', '.join(not_found_items)} in your cart.")
                     
-                if updated_items or removed_items:    
+                if updated_items or removed_items: 
+                       
                     session['active_intent'] = active_session
                     response = remove_from_cart(product_list)
                     return random.choice(self.predefined_response_manager.updated_cart())

@@ -1,3 +1,8 @@
+import pyttsx3
+
+
+
+
 class PromptManager():
     def __init__(self, user_prompt):
         self.user_prompt = user_prompt
@@ -172,12 +177,14 @@ class PredefinedResponseManager():
 
     def product_not_available(self):
         product_not_available_responses = [
-            "Sorry, we don't have enough stock for that product.",
-            "Unfortunately, we can't fulfill that request due to insufficient stock.",
-            "We apologize, but we don't have enough of that product available.",
-            "Regrettably, we can't add that item to your cart because of low stock.",
-            "I'm sorry, but we can't process that order due to stock limitations.",
-            "Unfortunately, we can't add that product to your cart as we don't have enough in stock.",
+            "Sorry, this product is currently unavailable. Please check back later or explore similar options.",
+            "Unfortunately, the item you're looking for is not in our inventory at the moment.",
+            "We apologize, but this product is out of stock and cannot be added to your cart right now.",
+            "This item has just sold out. We're working to restock it as soon as possible.",
+            "Oops! That product is no longer available. You may want to browse alternative options.",
+            "The product you requested is temporarily unavailable. Try again later or choose a different item.",
+            "Looks like that item isn't available for purchase right now. Thank you for your patience!",
+            "We're sorry! This product has been discontinued or is currently not offered.",
         ]
         
         return product_not_available_responses
@@ -322,7 +329,7 @@ class PredefinedResponseManager():
             "The modifications to your cart are complete."]
         return UPDATED_CART_RESPONSES
     
-    def welcome_messeges(self):
+    def welcome_messeges(self):       
         welcome_responses = [
             "Welcome to Swad Desi! What would you like to eat today?",
             "Hi there! Craving something desi and delicious?",
@@ -335,4 +342,14 @@ class PredefinedResponseManager():
             "Welcome! Swad Desi is your assistant for all things delicious and desi.",
             "Let’s get started — biryani, chole bhature, or something sweet from Swad Desi?"
         ]
-        return welcome_responses            
+        return welcome_responses      
+    
+    
+def speak(input_text):
+    engine = pyttsx3.init('sapi5')
+    voices = engine.getProperty('voices')
+    engine.setProperty('voices', voices[1].id)
+    engine.say(input_text)
+    engine.runAndWait()
+        
+           

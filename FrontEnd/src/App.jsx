@@ -17,15 +17,9 @@ import About from './Pages/About'
 import SignUp from './Pages/Auth/SignUP'
 import VoiceAssistance from './Pages/VoiceAssistant/VoiceAssi'
 import VoiceIcon from './assets/voice.svg'
-import { welcomeMessage } from './Redux/Slice/voiceAssi'
-import { useSpeechSynthesis } from 'react-speech-kit';
 
 function App() {
 
-  const { speak } = useSpeechSynthesis();
-const speechSynthesis = (text) => {
-  speak({ text: text, lang: 'en-US' , pitch:1.5});
-};
 
   const dispatch = useDispatch();
   const [popUp,setPopUp]= useState(false);
@@ -37,32 +31,6 @@ const speechSynthesis = (text) => {
     }
 
 
-
-let user_Id = useSelector((state) => state?.auth?.data?.userId)
-
-// useEffect(() => {
-//   const sendWelcome = async () => {
-//     try {
-//       console.log("User ID in welcomeCheck:", user_Id);
-//       if (!user_Id) return;  // Safety check
-//       const user_info = { user_Id };
-//       const response = await dispatch(welcomeMessage(user_info));
-//       console.log("Welcome message response in voice:", response);
-
-//       const message = response?.payload?.data?.response;
-//       if (message ) {
-//         speechSynthesis(message);  // 🔊 Speak it!
-//       }
-//     } catch (error) {
-//       console.error("Error in welcomeCheck:", error);
-//     }
-//   };
-
-//   sendWelcome();
-// }, [popUp]);
-
-  
- 
 
 const {cartData}=useSelector((state)=>state.cart);
 const { isLoggedIn, role } = useSelector((state) => state.auth);

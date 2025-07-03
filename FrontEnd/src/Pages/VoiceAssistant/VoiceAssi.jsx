@@ -8,20 +8,17 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { ColorRing } from 'react-loader-spinner';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import { useSpeechSynthesis } from 'react-speech-kit';
 import SiriWaveComponent from "./siri_wave";
 import { voiceAssitenceResponse, welcomeMessage } from "../../Redux/Slice/voiceAssi";
 
 function VoiceAssistance({ popUp,closePopUp })  {
 
-const { speak } = useSpeechSynthesis();
 
 
-  const [isSpeaking, setIsSpeaking] = useState(false);
   
   const [lastTranscript, setLastTranscript] = useState("");
   const [pauseTimer, setPauseTimer] = useState(null);
-  const [welcome,setWelcome] = useState(true);
+  const [changedTranscript,setChangedTranscript]=useState("");
 
 
     const products = useSelector((state) => state.product.productsData);
@@ -30,7 +27,6 @@ const { speak } = useSpeechSynthesis();
 
     const navigate = useNavigate();
 
-    let user_Id = useSelector((state) => state?.auth?.data?.userId)
     
     const {
       transcript,
@@ -51,44 +47,41 @@ const { speak } = useSpeechSynthesis();
   }
 
 
-const speakSynthesis = (text) => {
-  stopListening(); // 1. Stop listening to avoid feedback
-
-  speak({
-    text,
-    lang: 'en-US',
-    pitch: 1.5,
-    onend: () => {
-      // 2. Resume listening when speech ends
-      startListening();
-    }
-  });
-}
 
 
 
 async function handleVoiceCommand(transcript) {
   try{
-    if(!welcome){
+      stopListening()
       const response = await dispatch(voiceAssitenceResponse(transcript))
       console.log("Response from voice command :----->", response);
+      console.log("Intent:",response?.payload?.data?.intent)
+      if(response?.payload?.data?.intent=='log_in'){
+        navigate('/auth/login');
+      }
+      else if(response?.payload?.data?.intent=='new_user'){
+        navigate('/auth/signup');
+      }
+      else if(response?.payload?.data?.intent=='home_page'){
+        navigate('/');
+      }
+      else if(response?.payload?.data?.intent=='send_menu'){
+        navigate('/product/allProduct');
+      }
+      else if(response?.payload?.data?.intent=='watch_cart'){
+        navigate('/cart');
+        }
+      else if(response?.payload?.data?.intent=='payment'){
+        navigate('/order');
+      }
+
       if (response?.payload?.status == 200 ) {
         const message = response?.payload?.data?.response;
-        speakSynthesis(message);
+        setChangedTranscript(message)
         resetTranscript(); // Clear the transcript after processing
+        startListening()
       } 
-    }
-    else{
-      const response = await dispatch(voiceAssitenceResponse("I want a welcome messege."))
-      setWelcome(false); // Reset welcome state after processin
-      if (response?.payload?.data?.response) {
-        console.log("Response from welcome command:----->", response);
-        const message = response?.payload?.data?.response;
-        console.log(message)
-        speakSynthesis(message);
-        resetTranscript(); // Clear the transcript after processing
-      }
-    }
+    
   }
   catch (error) {
     console.error("Error in voice command handling:", error);
@@ -97,15 +90,19 @@ async function handleVoiceCommand(transcript) {
 
 
 }
-
+    let user_Id = useSelector((state) => state?.auth?.data?.userId)
     useEffect(() => {
       const sendWelcome = async () => {
         try {
           if (!user_Id) return;  // Safety check
-          const user_info = { user_Id };
+          const user_info =  user_Id ;
+          stopListening()
           const response = await dispatch(welcomeMessage(user_info));
+          setChangedTranscript(response?.payload?.message)
+          resetTranscript()
           if (response?.payload?.status==200) {
-            setWelcome(true)  // 🔊 Speak it!
+            console.log("Welcome message sent");
+            startListening()
           }
         } catch (error) {
           console.error("Error in welcomeCheck:", error);
@@ -113,18 +110,8 @@ async function handleVoiceCommand(transcript) {
       };
     
       sendWelcome();
-    }, [popUp]);
+    }, []);
     
-
-
-useEffect(() => {
-
-    setTimeout(() => {
-      resetTranscript();
-      startListening();
-      console.log("Listening started");
-    },0);
-}, []);
 
 
 
@@ -177,31 +164,35 @@ useEffect(() => {
             Voice Assistance
         </h1>
     </div>
-{listening &&
-    <div className="w-full flex flex-row  justify-center items-center ">
-        <SiriWaveComponent isSpeaking={true} />
-    </div>
-
-}
+    {listening &&
+        <div className="w-full flex flex-row  justify-center items-center ">
+            <SiriWaveComponent isSpeaking={true} />
+        </div>
+    }
 
     {/* Transcript Display */}
+ {listening ?  
     <div className=" w-full flex justify-center items-center bg-transparent text-white p-4 rounded-xl min-h-[100px] mb-6 overflow-y-auto">
       <p className="whitespace-pre-wrap">{transcript || "Say something..."}</p>
+    </div>:
+    
+    <div className=" w-full flex justify-center items-center bg-transparent text-white p-4 rounded-xl min-h-[100px] mb-6 overflow-y-auto">
+      <p className="whitespace-pre-wrap">{"Speaking..."}</p>
     </div>
+        }
 
     <div className="flex flex-col items-center mb-6">
 {
-  isSpeaking?
+  !listening?
     <button onClick={()=>{
       startListening()
-      setIsSpeaking(!isSpeaking)}} className="flex flex-col justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-2xl transition ">
+     }} className="flex flex-col justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-2xl transition ">
       <div className="flex justify-center items-center ">
         Start Listening
     </div>
     </button>:
     <button  onClick={()=>{
       stopListening()
-      setIsSpeaking(!isSpeaking )
       resetTranscript()
       navigate("/about")
       }} className="flex flex-col justify-center items-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-2xl transition ">
