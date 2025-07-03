@@ -61,15 +61,16 @@ A **voice-controlled AI agent** built with **Flask** and **Google's Gemini API**
 
 ## 📁 Project Structure (High-Level)
 
-
 📦 SwadDesi
-├── frontend/ # React-based UI (Tailwind, Speech Recognition)
-├── backend/ # Node + Express API
-├── flask-ai/ # Python Flask server for AI tasks
-│ ├── voice_assistant/ # Gemini-powered voice assistant
-│ └── image_model/ # Food image recognition
-├── public/ # Static assets
-└── README.md
+├── FLASK_BACKEND/         # Python Flask server for AI tasks
+│   ├── voice_assistant/   # Gemini-powered voice assistant
+│   └── image_model/       # Food image recognition module
+├── FrontEnd/              # React + Tailwind + SpeechRecognition for UI
+├── JS_BACKEND/            # Node.js + Express API
+├── venv/                  # Python virtual environment
+├── .github/               # GitHub Actions / CI workflows
+├── .gitignore             # Files to ignore in Git
+└── README.md              # You are here!
 
 
 ---
